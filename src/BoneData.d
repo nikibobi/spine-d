@@ -12,6 +12,9 @@ public:
     }
 
     unittest {
+        import std.exception;
+        assertThrown(new BoneData(null));
+
         auto b = new BoneData("child", new BoneData("parent"));
         assert(b.name == "child");
         assert(b.parent.name == "parent");
