@@ -1,9 +1,9 @@
-module slotdata;
+module spine.slotdata;
 
-import BoneData;
+public import spine.bonedata;
 
 export class SlotData {
-public:
+
     this(string name, BoneData boneData) {
         if(name is null)
             throw new Exception("name cannot be null.");
@@ -93,6 +93,7 @@ public:
     override string toString() {
         return name;
     }
+    
 private:
     string _name;
     BoneData _boneData;

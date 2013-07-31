@@ -1,4 +1,4 @@
-module bonedata;
+module spine.bonedata;
 
 export class BoneData {
 public:
