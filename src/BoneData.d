@@ -1,9 +1,9 @@
-module BoneData;
+module bonedata;
 
 export class BoneData {
 public:
     this(string name, BoneData parent = null) {
-        if(name == null)
+        if(name is null)
             throw new Exception("name cannot be null.");
         this.name = name;
         this.parent = parent;
