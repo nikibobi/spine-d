@@ -18,6 +18,11 @@ export class SlotData {
     }
 
     unittest {
+        debug {
+            import std.stdio;
+            writeln("Test: SlotData");
+        }
+
         import std.exception;
         assertThrown(new SlotData(null, new BoneData("bone")));
         assertThrown(new SlotData("name", null));
@@ -93,7 +98,7 @@ export class SlotData {
     override string toString() {
         return name;
     }
-    
+
 private:
     string _name;
     BoneData _boneData;

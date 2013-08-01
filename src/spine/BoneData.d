@@ -1,7 +1,7 @@
 module spine.bonedata;
 
 export class BoneData {
-public:
+
     this(string name, BoneData parent = null) {
         if(name is null)
             throw new Exception("name cannot be null.");
@@ -12,6 +12,11 @@ public:
     }
 
     unittest {
+        debug {
+            import std.stdio;
+            writeln("Test: BoneData");
+        }
+        
         import std.exception;
         assertThrown(new BoneData(null));
 
