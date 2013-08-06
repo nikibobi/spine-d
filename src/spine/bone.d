@@ -4,7 +4,9 @@ import spine.util;
 
 static import std.math;
 
-export class BoneData {
+export:
+
+class BoneData {
 
     this(string name, BoneData parent = null) {
         mixin(ArgNull!name);
@@ -135,7 +137,7 @@ private:
     bool _inheritRotation;
 }
 
-export class Bone {
+class Bone {
 
     static bool yDown;
 

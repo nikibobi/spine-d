@@ -7,13 +7,17 @@ import spine.util;
 
 import std.algorithm;
 
-export class SlotData {
+export:
+
+class SlotData {
 
     this(string name, BoneData boneData) {
         mixin(ArgNull!name);
         mixin(ArgNull!boneData);
         this.name = name;
         this.boneData = boneData;
+
+        //TODO: fix strange error: not a propertsy 'b'
         r = g = b = a = 1;
     }
 
@@ -106,7 +110,7 @@ private:
     string _attachmentName;
 }
 
-export class Slot {
+class Slot {
 
     this(SlotData data, Skeleton skeleton, Bone bone) {
         mixin(ArgNull!data);

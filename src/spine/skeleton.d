@@ -7,11 +7,15 @@ import spine.skin;
 import spine.animation;
 import spine.util;
 
-export class SkeletonJson {
+import std.algorithm;
+
+export:
+
+class SkeletonJson {
     //TODO: implement using std.json;
 }
 
-export class SkeletonData {
+class SkeletonData {
 
     Skin defaultSkin;
 
@@ -62,7 +66,7 @@ export class SkeletonData {
 
     void addBone(BoneData bone) {
         mixin(ArgNull!bone);
-        bones ~= bone;
+        bones = bones~bone;
     }
 
     BoneData findBone(string boneName) {
@@ -83,7 +87,7 @@ export class SkeletonData {
 
     void addSlot(SlotData slot) {
         mixin(ArgNull!slot);
-        slots ~= slot;
+        slots = slots~slot;
     }
 
     SlotData findSlot(string slotName) {
@@ -104,7 +108,7 @@ export class SkeletonData {
 
     void addSkin(Skin skin) {
         mixin(ArgNull!skin);
-        skins ~= skin;
+        skins = skins~skin;
     }
 
     Skin findSkin(string skinName) {
@@ -117,7 +121,7 @@ export class SkeletonData {
 
     void addAnimation(Animation animation) {
         mixin(ArgNull!animation);
-        animations ~= animation;
+        animations = animations~animation;
     }
 
     Animation findAnimation(string animationName) {
@@ -140,27 +144,29 @@ private:
     Animation[] _animations;
 }
 
-export class Skeleton {
+class Skeleton {
 
     this(SkeletonData data) {
         mixin(ArgNull!data);
         this.data = data;
 
-        bones.length = data.bones.length;
+        bones = new Bone[data.bones.length];
         foreach(boneData; data.bones) {
             Bone parent = boneData is null ? null : bones[countUntil(data.bones, boneData.parent)];
-            bones ~= new Bone(boneData, parent);
+            bones = bones~new Bone(boneData, parent);
         }
 
-        slots.length = drawOrder.length = data.slots.length;
+        slots = new Slot[data.slots.length];
+        drawOrder = new Slot[data.slots.length];
         foreach(slotData; data.slots) {
             Bone bone = bones[countUntil(data.bones, slotData.boneData)];
             Slot slot = new Slot(slotData, this, bone);
-            slots ~= slot;
-            drawOrder ~= slot;
+            slots = slots~slot;
+            drawOrder = drawOrder~slot;
         }
 
-        r = g = b = a = 1;
+        //TODO: fix strange error: not a propertsy 'b'
+        r = g = b = a = 1f;
     }
 
     @property {
@@ -378,7 +384,7 @@ export class Skeleton {
 
     void setAttachment(string slotName, string attachmentName) {
         mixin(ArgNull!slotName);
-        foreach(i, slot; slot) {
+        foreach(i, slot; slots) {
             if(slot.data.name == slotName) {
                 Attachment attachment;
                 if(attachmentName !is null) {
@@ -394,7 +400,7 @@ export class Skeleton {
     }
 
     void update(float delta) {
-        time += delta;
+        time = time + delta;
     }
 
 private:

@@ -5,7 +5,9 @@ import spine.slot;
 import spine.skeleton;
 import spine.util;
 
-export class Skin {
+export:
+
+class Skin {
 
     this(string name) {
         mixin(ArgNull!name);
@@ -72,7 +74,7 @@ private:
             this.name = name;
         }
 
-        const hash_t opHash() {
+        hash_t opHash() {
             return slotIndex;
         }
 

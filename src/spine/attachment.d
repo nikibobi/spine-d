@@ -8,7 +8,9 @@ import spine.util;
 import std.conv;
 static import std.math;
 
-abstract export class Attachment {
+export:
+
+abstract class Attachment {
 
     this(string name) {
         mixin(ArgNull!name);
@@ -32,7 +34,7 @@ private:
     string _name;
 }
 
-export class RegionAttachment : Attachment {
+class RegionAttachment : Attachment {
 
     enum { X1, Y1, X2, Y2, X3, Y3, X4, Y4 }
 
@@ -44,7 +46,7 @@ export class RegionAttachment : Attachment {
     float width;
     float height;
 
-    Object renderObject;
+    Object rendererObject;
     float regionOffsetX;
     float regionOffsetY;
     float regionWidth;
@@ -149,16 +151,16 @@ private:
     float[8] _uvs;
 }
 
-export enum AttachmentType { 
+enum AttachmentType { 
     Region, 
     RegionSequence
 }
 
-export interface AttachmentLoader {
+interface AttachmentLoader {
     Attachment NewAttachment(Skin skin, AttachmentType type, string name);
 }
 
-export class AtlasAttachmentLoader : AttachmentLoader {
+class AtlasAttachmentLoader : AttachmentLoader {
 
     this(Atlas atlas) {
         mixin(ArgNull!atlas);
@@ -168,11 +170,11 @@ export class AtlasAttachmentLoader : AttachmentLoader {
     Attachment NewAttachment(Skin skin, AttachmentType type, string name) {
         switch(type) {
             case AttachmentType.Region:
-                AtlasRegion region = atlas.findRegion(name);
+                AtlasRegion region = _atlas.findRegion(name);
                 if(region is null)
-                    throw new Exception("Region not found in atlas: "~name~" ("~to!string(type)~")");
+                    throw new Exception("Region not found in atlas: "~name~" ("~type.to!string~")");
                 RegionAttachment attachment = new RegionAttachment(name);
-                attachment.renderObject = region.page.renderObject;
+                attachment.rendererObject = region.page.rendererObject;
                 attachment.setUVs(region.u, region.v, region.u2, region.v2, region.rotate);
                 attachment.regionOffsetX = region.offsetX;
                 attachment.regionOffsetY = region.offsetY;
@@ -182,7 +184,7 @@ export class AtlasAttachmentLoader : AttachmentLoader {
                 attachment.regionOriginalHeight = region.originalHeight;
                 return attachment;
             default:
-                throw new Exception("Unknown attachment type: "~to!string(type));
+                throw new Exception("Unknown attachment type: "~type.to!string);
         }
     }
 

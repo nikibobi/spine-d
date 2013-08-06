@@ -1,11 +1,15 @@
 module spine.animation;
 
+import spine.bone;
+import spine.slot;
 import spine.skeleton;
 import spine.util;
 
 import std.range;
 
-export class AnimationStateData {
+export:
+
+class AnimationStateData {
 
     this(SkeletonData skeletonData) {
         this.skeletonData = skeletonData;
@@ -63,17 +67,17 @@ private:
             this.to = to;
         }
 
-        const hash_t opHash() {
+        hash_t opHash() {
             return from.toHash() ^ to.toHash();
         }
 
         const bool opEquals(ref const Key other) {
-            this.from == other.from && this.to == other.to;
+            return this.from == other.from && this.to == other.to;
         }
     }
 }
 
-export class AnimationState {
+class AnimationState {
 
     this(AnimationStateData data) {
         mixin(ArgNull!data);
@@ -99,7 +103,7 @@ export class AnimationState {
     }
 
     @property {
-        float time() {
+        ref float time() {
             return _time;
         }
         void time(float value) {
@@ -121,11 +125,11 @@ export class AnimationState {
         _previousTime += delta;
         _mixTime += delta;
 
-        if(!queue.empty) {
-            QueueEntry entry = queue.front;
+        if(!_queue.empty) {
+            QueueEntry entry = _queue.front;
             if(time >= entry.delay) {
                 setAnimationInternal(entry.animation, entry.loop);
-                queue.popFront();
+                _queue.popFront();
             }
         }
     }
@@ -155,13 +159,13 @@ export class AnimationState {
 
     void addAnimation(Animation animation, bool loop, float delay = 0) {
         if(delay <= 0) {
-            Animation previousAnimation = queue.empty ? this.animation : queue[$-1].animation;
+            Animation previousAnimation = _queue.empty ? this.animation : _queue[$-1].animation;
             if(previousAnimation !is null)
                 delay += previousAnimation.duration - data.getMix(previousAnimation, animation);
             else
                 delay = 0;
         }
-        queue ~= QueueEntry(animation, loop, delay);
+        _queue ~= QueueEntry(animation, loop, delay);
     }
 
     private void setAnimationInternal(Animation animation, bool loop) {
@@ -188,12 +192,12 @@ export class AnimationState {
     }
 
     void setAnimation(Animation animation, bool loop) {
-        queue = [];
+        _queue = [];
         setAnimationInternal(animation, loop);
     }
 
     void clearAnimation() {
-        queue = [];
+        _queue = [];
         _previous = null;
         animation = null;
     }
@@ -224,7 +228,7 @@ private:
     }
 }
 
-export class Animation {
+class Animation {
 
     this(string name, Timeline[] timelines, float duration) {
         mixin(ArgNull!name);
@@ -267,7 +271,7 @@ export class Animation {
 
     void mix(Skeleton skeleton, float time, bool loop, float alpha) {
         mixin(ArgNull!skeleton);
-        if(loop && duration != null)
+        if(loop && duration)
             time %= duration;
         foreach(timeline; timelines)
             timeline.apply(skeleton, time, alpha);
@@ -297,24 +301,28 @@ export class Animation {
         return -1;
     }
 
+    override hash_t toHash() {
+        return cast(hash_t)_duration; //TODO: use better hash
+    }
+
 private:
     string _name;
     Timeline[] _timelines;
     float _duration;
 }
 
-export interface Timeline {
+interface Timeline {
     void apply(Skeleton skeleton, float time, float alpha);
 }
 
-export abstract class CurveTimeline : Timeline {
+abstract class CurveTimeline : Timeline {
 
     protected enum float LINEAR = 0;
     protected enum float STEPPED = -1;
     protected enum int BEZIER_SEGMENTS = 10;
 
     this(int frameCount) {
-        _curves.length = (frameCount - 1) * 6;
+        _curves = new float[(frameCount - 1) * 6];
     }
 
     @property int frameCount() {
@@ -388,14 +396,14 @@ export abstract class CurveTimeline : Timeline {
     private float[] _curves;
 }
 
-export class RotateTimeline : CurveTimeline {
+class RotateTimeline : CurveTimeline {
 
     protected enum int LAST_FRAME_TIME = -2;
     protected enum int FRAME_VALUE = 1;
 
     this(int frameCount) {
         super(frameCount);
-        frames.length = frameCount * 2;
+        frames = new float[frameCount * 2];
     }
 
     @property {
@@ -435,7 +443,7 @@ export class RotateTimeline : CurveTimeline {
                 amount -= 360;
             while(amount < -180)
                 amount += 360;
-            bone.rotation += amount * alpha;
+            bone.rotation = bone.rotation + amount * alpha;
             return;
         }
 
@@ -455,7 +463,7 @@ export class RotateTimeline : CurveTimeline {
             amount -= 360;
         while(amount < -180)
             amount += 360;
-        bone.rotation += amount * alpha;
+        bone.rotation = bone.rotation + amount * alpha;
     }
 
 private:
@@ -463,7 +471,7 @@ private:
     float[] _frames;
 }
 
-export class TranslateTimeline : CurveTimeline {
+class TranslateTimeline : CurveTimeline {
 
     protected enum int LAST_FRAME_TIME = -3;
     protected enum int FRAME_X = 1;
@@ -471,7 +479,7 @@ export class TranslateTimeline : CurveTimeline {
 
     this(int frameCount) {
         super(frameCount);
-        frames.length = frameCount * 3;
+        frames = new float[frameCount * 3];
     }
 
     @property {
@@ -506,8 +514,8 @@ export class TranslateTimeline : CurveTimeline {
         Bone bone = skeleton.bones[boneIndex];
 
         if(time >= frames[$ - 3]) {
-            bone.x += (bone.data.x + frames[$ - 2] - bone.x) * alpha;
-            bone.y += (bone.data.y + frames[$ - 1] - bone.y) * alpha;
+            bone.x = bone.x + (bone.data.x + frames[$ - 2] - bone.x) * alpha;
+            bone.y = bone.y + (bone.data.y + frames[$ - 1] - bone.y) * alpha;
             return;
         }
 
@@ -518,8 +526,8 @@ export class TranslateTimeline : CurveTimeline {
         float percent = 1 - (time - frameTime) / (frames[frameIndex + LAST_FRAME_TIME] - frameTime);
         percent = getCurvePercent(frameIndex / 3 - 1, percent < 0 ? 0 : (percent > 1 ? 1 : percent));
 
-        bone.x += (bone.data.x + lastFrameX + (frames[frameIndex + FRAME_X] - lastFrameX) * percent - bone.x) * alpha;
-        bone.y += (bone.data.y + lastFrameY + (frames[frameIndex + FRAME_Y] - lastFrameY) * percent - bone.y) * alpha;
+        bone.x = bone.x + (bone.data.x + lastFrameX + (frames[frameIndex + FRAME_X] - lastFrameX) * percent - bone.x) * alpha;
+        bone.y = bone.y + (bone.data.y + lastFrameY + (frames[frameIndex + FRAME_Y] - lastFrameY) * percent - bone.y) * alpha;
     }
 
 private:
@@ -527,7 +535,7 @@ private:
     float[] _frames;
 }
 
-export class ScaleTimeline : TranslateTimeline {
+class ScaleTimeline : TranslateTimeline {
 
     this(int frameCount) {
         super(frameCount);
@@ -539,8 +547,8 @@ export class ScaleTimeline : TranslateTimeline {
 
         Bone bone = skeleton.bones[boneIndex];
         if(time >= frames[$ - 3]) {
-            bone.scaleX += (bone.data.scaleX - 1 + frames[$ - 2] - bone.scaleX) * alpha;
-            bone.scaleY += (bone.data.scaleY - 1 + frames[$ - 1] - bone.scaleY) * alpha;
+            bone.scaleX = bone.scaleX + (bone.data.scaleX - 1 + frames[$ - 2] - bone.scaleX) * alpha;
+            bone.scaleY = bone.scaleY + (bone.data.scaleY - 1 + frames[$ - 1] - bone.scaleY) * alpha;
             return;
         }
 
@@ -551,18 +559,19 @@ export class ScaleTimeline : TranslateTimeline {
         float percent = 1 - (time - frameTime) / (frames[frameIndex + LAST_FRAME_TIME] - frameTime);
         percent = getCurvePercent(frameIndex / 3 - 1, percent < 0 ? 0 : (percent > 1 ? 1 : percent));
 
-        bone.scaleX += (bone.data.scaleX - 1 + lastFrameX + (frames[frameIndex + FRAME_X] - lastFrameX) * percent - bone.scaleX) * alpha;
-        bone.scaleY += (bone.data.scaleY - 1 + lastFrameY + (frames[frameIndex + FRAME_Y] - lastFrameY) * percent - bone.scaleY) * alpha;
+        bone.scaleX = bone.scaleX + (bone.data.scaleX - 1 + lastFrameX + (frames[frameIndex + FRAME_X] - lastFrameX) * percent - bone.scaleX) * alpha;
+        bone.scaleY = bone.scaleY + (bone.data.scaleY - 1 + lastFrameY + (frames[frameIndex + FRAME_Y] - lastFrameY) * percent - bone.scaleY) * alpha;
     }
 }
 
-export class ColorTimeline : CurveTimeline {
+class ColorTimeline : CurveTimeline {
 
     protected enum int LAST_FRAME_TIME = -5;
     protected enum { FRAME_R = 1, FRAME_G, FRAME_B, FRAME_A }
 
     this(int frameCount) {
-        frames.length = frameCount * 5;
+        super(frameCount);
+        frames = new float[frameCount * 5];
     }
 
     @property {
@@ -620,10 +629,10 @@ export class ColorTimeline : CurveTimeline {
         float b = lastFrameB + (frames[frameIndex + FRAME_B] - lastFrameB) * percent;
         float a = lastFrameA + (frames[frameIndex + FRAME_A] - lastFrameA) * percent;
         if (alpha < 1) {
-            slot.r += (r - slot.r) * alpha;
-            slot.g += (g - slot.g) * alpha;
-            slot.b += (b - slot.b) * alpha;
-            slot.a += (a - slot.a) * alpha;
+            slot.r = slot.r + (r - slot.r) * alpha;
+            slot.g = slot.g + (g - slot.g) * alpha;
+            slot.b = slot.b + (b - slot.b) * alpha;
+            slot.a = slot.a + (a - slot.a) * alpha;
         } else {
             slot.r = r;
             slot.g = g;
@@ -637,11 +646,11 @@ private:
     float[] _frames;
 }
 
-export class AttachmentTimeline : Timeline {
+class AttachmentTimeline : Timeline {
 
     this(int frameCount) {
-        frames.length = frameCount;
-        attachmentNames.length = frameCount;
+        frames = new float[frameCount];
+        attachmentNames = new string[frameCount];
     }
 
     @property {
