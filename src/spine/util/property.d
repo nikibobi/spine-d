@@ -1,4 +1,4 @@
-module spine.util;
+module spine.util.property;
 
 import std.algorithm : reduce;
 import std.array : split;
@@ -8,77 +8,6 @@ import std.string;
 version(unittest) {
     import std.stdio : write, writeln;
     import std.exception; 
-}
-
-@property auto init(Target)() {
-    writeln(Target.init);
-    return Target.init;
-}
-
-@property auto init(Source, Target)() {
-    return init!Source.to!Target;
-}
-
-@property void init(Source, Target)(out Target target) {
-    target = init!(Source, Target);
-}
-
-unittest {
-    struct MyInt {
-        alias x this;
-
-        private int x;
-    }
-
-    MyInt f;
-    init!bool(f);
-
-    auto v = init!float; // the same as float.init
-
-    v.init!bool;
-    v.writeln;
-
-    string str = init!(int, string);
-    str.writeln;
-
-    /*writeln(2.to!string);
-    (3.14.roundTo!int, 2, 1, 0).writeln;
-    string text = "42";
-    text.parse!int.writeln;*/
-}
-
-package:
-
-//this is just the name of the current function(use with mixins)
-enum string FUNCTION = `__FUNCTION__[__FUNCTION__.lastIndexOf(".")+1..$]`;
-
-struct Vector {
-    float x;
-    float y;
-    alias x width;
-    alias y height;
-}
-
-unittest {
-    Vector pos = Vector(4, 2);
-    assert(pos.x == 4);
-    assert(pos.y == 2);
-    assert(pos.width == 4);
-    assert(pos.height == 2);
-}
-
-template ArgNull(alias argument) {
-    enum ArgNull = format(
-    "if(%1$s is null)
-        throw new Exception(\"%1$s cannot be null.\");", argument.stringof);
-}
-
-unittest {
-    void func(string str) {
-        mixin(ArgNull!str);
-    }
-    assertThrown(func(null));
-    assertNotThrown(func("test"));
 }
 
 alias Conv!("_||") DefaultConv;
@@ -184,7 +113,6 @@ private mixin template MPropPrivate(alias name) {
 }
 
 unittest {
-
     class Foo {
         mixin Get!_readOnly; // test only 'get'
         mixin Set!_writeOnly; // test only 'set'
