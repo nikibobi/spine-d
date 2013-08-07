@@ -1,10 +1,6 @@
 module spine.util.argnull;
 
-import std.string;
-version(unittest) {
-    import std.stdio : write, writeln;
-    import std.exception; 
-}
+import std.string : format;
 
 template ArgNull(alias argument) {
     enum ArgNull = format(
@@ -13,6 +9,7 @@ template ArgNull(alias argument) {
 }
 
 unittest {
+    import std.exception;
     void func(string str) {
         mixin(ArgNull!str);
     }
