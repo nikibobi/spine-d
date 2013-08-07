@@ -7,9 +7,11 @@ struct Vector {
     alias y height;
 }
 
+alias Vector Size;
+
 unittest {
     Vector pos = Vector(4, 2);
     assert(pos.x == pos.width);
     assert(pos.y == pos.height);
-    assert(pos == Vector(4, 2));
+    assert(pos == Size(4, 2));
 }
