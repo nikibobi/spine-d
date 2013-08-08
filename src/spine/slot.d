@@ -17,8 +17,7 @@ class SlotData {
         this.name = name;
         this.boneData = boneData;
 
-        //TODO: fix strange error: not a propertsy 'b'
-        r = g = b = a = 1;
+        r,g,b,a = 1;
     }
 
     unittest {
