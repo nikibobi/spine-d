@@ -1,40 +1,6 @@
-module spine.attachment;
+module spine.attachment.region;
 
-import spine.bone;
-import spine.skin;
-import spine.atlas;
-import spine.util;
-
-import std.conv;
-static import std.math;
-
-export:
-
-abstract class Attachment {
-
-    this(string name) {
-        mixin(ArgNull!name);
-        this.name = name;
-    }
-
-    @property {
-        string name() {
-            return _name;
-        }
-        private void name(string value) {
-            _name = value;
-        }
-    }
-
-    override string toString() {
-        return name;
-    }
-
-private:
-    string _name;
-}
-
-class RegionAttachment : Attachment {
+export class RegionAttachment : Attachment {
 
     enum { X1, Y1, X2, Y2, X3, Y3, X4, Y4 }
 
@@ -149,44 +115,4 @@ class RegionAttachment : Attachment {
 private:
     float[8] _offset;
     float[8] _uvs;
-}
-
-enum AttachmentType { 
-    Region, 
-    RegionSequence
-}
-
-interface AttachmentLoader {
-    Attachment NewAttachment(Skin skin, AttachmentType type, string name);
-}
-
-class AtlasAttachmentLoader : AttachmentLoader {
-
-    this(Atlas atlas) {
-        mixin(ArgNull!atlas);
-        _atlas = atlas;
-    }
-
-    Attachment NewAttachment(Skin skin, AttachmentType type, string name) {
-        switch(type) {
-            case AttachmentType.Region:
-                AtlasRegion region = _atlas.findRegion(name);
-                if(region is null)
-                    throw new Exception("Region not found in atlas: "~name~" ("~type.to!string~")");
-                RegionAttachment attachment = new RegionAttachment(name);
-                attachment.rendererObject = region.page.rendererObject;
-                attachment.setUVs(region.u, region.v, region.u2, region.v2, region.rotate);
-                attachment.regionOffsetX = region.offsetX;
-                attachment.regionOffsetY = region.offsetY;
-                attachment.regionWidth = region.width;
-                attachment.regionHeight = region.height;
-                attachment.regionOriginalWidth = region.originalWidth;
-                attachment.regionOriginalHeight = region.originalHeight;
-                return attachment;
-            default:
-                throw new Exception("Unknown attachment type: "~type.to!string);
-        }
-    }
-
-    private Atlas _atlas;
 }

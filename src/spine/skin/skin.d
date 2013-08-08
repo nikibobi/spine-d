@@ -1,13 +1,6 @@
-module spine.skin;
+module spine.skin.skin;
 
-import spine.attachment;
-import spine.slot;
-import spine.skeleton;
-import spine.util;
-
-export:
-
-class Skin {
+export class Skin {
 
     this(string name) {
         mixin(ArgNull!name);

@@ -1,11 +1,11 @@
 module spine.all;
 
 public {
-    import spine.animation;
-    import spine.atlas;
-    import spine.attachment;
-    import spine.bone;
-    import spine.skeleton;
-    import spine.skin;
-    import spine.slot;
+    import spine.animation.all;
+    import spine.atlas.all;
+    import spine.attachment.all;
+    import spine.bone.all;
+    import spine.skeleton.all;
+    import spine.skin.all;
+    import spine.slot.all;
 }
