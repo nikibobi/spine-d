@@ -165,7 +165,6 @@ class Skeleton {
             drawOrder = drawOrder~slot;
         }
 
-        //TODO: fix strange error: not a propertsy 'b'
         r,g,b,a = 1f;
     }
 
