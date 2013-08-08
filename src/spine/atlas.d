@@ -16,7 +16,7 @@ class Atlas {
 	}
 	
 	private void load(File reader, string imagesDir, TextureLoader textureLoader) {
-		this.textureLoader = textureLoader;
+		this._textureLoader = textureLoader;
 		
 		auto tuple = new string[4];
 		AtlasPage page;
@@ -46,7 +46,7 @@ class Atlas {
 				else if (direction == "xy")
 					page.uWrap = page.vWrap = TextureWrap.Repeat;
 				
-				textureLoader.load(page, text(imagesDir,line));
+				_textureLoader.load(page, text(imagesDir, line));
 				
 				_pages ~= page;
 				
@@ -101,7 +101,7 @@ class Atlas {
 				region.offsetX = tuple[0].to!int;
 				region.offsetY = tuple[1].to!int;
 				
-				region.index = to!int(readValue(reader));
+				region.index = readValue(reader).to!int;
 				
 				_regions ~= region;
 			}
@@ -110,12 +110,12 @@ class Atlas {
 	
 	private static string readValue(File reader) {
 		auto line = reader.readln();
-		assert(findSkip(line,":") == true);//Chops everything before ":" and leaves everything as is
+		assert(findSkip(line, ":"));//Chops everything before ":" and leaves everything as is
 		return line.strip();
 	}
 	
 	private static int readTuple(File reader, string[] tuple) {
-		//ToDo:: Implement me!
+		//TODO: Implement me!
 		return 0;
 	}
 	
@@ -128,14 +128,13 @@ class Atlas {
 	
 	void dispose() {
 		foreach(page; _pages)
-			textureLoader.unload(page.rendererObject);
+			_textureLoader.unload(page.rendererObject);
 	}
-	
 	
 private:
 	AtlasPage[] _pages;
 	AtlasRegion[] _regions;
-	TextureLoader textureLoader;
+	TextureLoader _textureLoader;
 }
 
 enum Format {
@@ -167,10 +166,8 @@ enum TextureWrap {
 class AtlasPage {
 	string name;
 	Format format;
-	TextureFilter minFilter;
-	TextureFilter magFilter;
-	TextureWrap uWrap;
-	TextureWrap vWrap;
+	TextureFilter minFilter, magFilter;
+	TextureWrap uWrap, vWrap;
 	Object rendererObject;
 	int width, height;
 }
