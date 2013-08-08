@@ -1,34 +1,29 @@
 module spine.util.init;
 
-debug import std.stdio;
+import std.conv : to;
 
-@property auto init(Target)() {
-    debug writeln(Target.init);
-    return Target.init;
+@property auto init(Target, Source = Target)() {
+    return Source.init.to!Target;
 }
 
-@property auto init(Source, Target)() {
-    return init!Source.to!Target;
-}
-
-@property void init(Source, Target)(out Target target) {
-    target = init!(Source, Target);
+@property void init(Target, Source = Target)(out Target target) {
+    target = init!(Target, Source);
 }
 
 unittest {
-    struct MyInt {
-        alias x this;
-        private int x;
-    }
+    int n = init!bool;
+    assert(n == 0);
 
-    MyInt f;
-    init!bool(f);
+    long l;
+    l.init!(long, uint);
+    assert(l == uint.init);
 
-    auto v = init!float; // the same as float.init
+    auto boolean = init!(string, bool);
+    assert(is(typeof(boolean) == string));
+    assert(boolean == "false");
 
-    v.init!bool;
-    debug v.writeln;
-
-    string str = init!(int, string);
-    debug str.writeln;
+    class Foo {} //test subject
+    auto nullFoo = init!(string, Foo);
+    assert(is(typeof(nullFoo) == string));
+    assert(nullFoo == "null");
 }
