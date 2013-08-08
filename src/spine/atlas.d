@@ -80,16 +80,12 @@ class Atlas {
 				region.height = abs(height);
 				
 				if (readTuple(reader, tuple) == 4) { // split is optional
-					region.splits[0] = tuple[0].to!int;
-					region.splits[1] = tuple[1].to!int;
-					region.splits[2] = tuple[2].to!int;
-					region.splits[3] = tuple[3].to!int;
-					
+                    foreach(i; 0..4)
+					    region.splits[i] = tuple[i].to!int;
+
 					if (readTuple(reader, tuple) == 4) { // pad is optional, but only present with splits
-						region.pads[0] = tuple[0].to!int;
-						region.pads[1] = tuple[1].to!int;
-						region.pads[2] = tuple[2].to!int;
-						region.pads[3] = tuple[3].to!int;
+                        foreach(i; 0..4)
+                            region.pads[i] = tuple[i].to!int;
 						readTuple(reader, tuple);
 					}
 				}
