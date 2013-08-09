@@ -6,6 +6,7 @@ import std.string;
 import std.conv;
 import std.math;
 import std.algorithm : findSkip;
+import std.algorithm : countUntil;
 
 export:
 
@@ -115,8 +116,21 @@ class Atlas {
 	}
 	
 	private static int readTuple(File reader, string[] tuple) {
-		//ToDo:: Implement me!
-		return 0;
+		auto line = reader.readln();
+		auto colon = line.indexOf(':');
+		assert(colon != -1); //Invalid Line
+		int i = 0, lastMatch = colon + 1;
+		for (; i < 3; i++) {
+			auto comma = countUntil(line,lastMatch,',');
+			if (comma == -1) {
+				assert(i != 0); //Invalid Line
+				break;
+			}
+			tuple[i] = line[lastMatch..comma - lastMatch].strip();
+			lastMatch = comma + 1;
+		}
+		tuple[i] = line[lastMatch..line.length].strip();
+		return i + 1;
 	}
 	
 	AtlasRegion findRegion(string name) {
