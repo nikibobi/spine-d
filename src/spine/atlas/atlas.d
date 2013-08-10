@@ -109,8 +109,19 @@ export class Atlas {
     }
     
     private static int readTuple(File reader, string[] tuple) {
-        //TODO: Implement me!
-        return 0;
+        auto line = reader.readln();
+        auto colon = line.indexOf(':');
+        assert(colon != -1); //Invalid Line
+        auto lastMatch = colon + 1;
+        for (auto i = 0; i < 3; i++) {
+            auto comma = countUntil(line, lastMatch, ',');
+            if (comma == -1)
+                assert(i != 0); //Invalid Line
+            tuple[i] = line[lastMatch..comma - lastMatch].strip();
+            lastMatch = comma + 1;
+        }
+        tuple[i] = line[lastMatch..line.length].strip();
+        return i + 1;
     }
     
     AtlasRegion findRegion(string name) {
