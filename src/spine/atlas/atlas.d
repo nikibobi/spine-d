@@ -112,8 +112,8 @@ export class Atlas {
         auto line = reader.readln();
         auto colon = line.indexOf(':');
         assert(colon != -1); //Invalid Line
-        auto lastMatch = colon + 1;
-        for (auto i = 0; i < 3; i++) {
+        int i = 0, lastMatch = colon + 1;
+        for (; i < 3; i++) {
             auto comma = countUntil(line, lastMatch, ',');
             if (comma == -1)
                 assert(i != 0); //Invalid Line
