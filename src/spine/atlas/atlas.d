@@ -56,21 +56,21 @@ export class Atlas {
                 region.rotate = readValue(reader).to!bool;
                 
                 readTuple(reader, tuple);
-                auto x = tuple[0].to!float;
-                auto y = tuple[1].to!float;
+                auto x = tuple[0].to!int;
+                auto y = tuple[1].to!int;
                 
                 readTuple(reader, tuple);
-                auto width = tuple[0].to!float;
-                auto height = tuple[1].to!float;
+                auto width = tuple[0].to!int;
+                auto height = tuple[1].to!int;
                 
-                region.u = x / page.width;
-                region.v = y / page.height;
+                region.u = x / page.width.to!float;
+                region.v = y / page.height.to!float;
                 if (region.rotate) {
-                    region.u2 = (x + height) / page.width;
-                    region.v2 = (y + width) / page.height;
+                    region.u2 = (x + height) / page.width.to!float;
+                    region.v2 = (y + width) / page.height.to!float;
                 } else {
-                    region.u2 = (x + width) / page.width;
-                    region.v2 = (y + height) / page.height;
+                    region.u2 = (x + width) / page.width.to!float;
+                    region.v2 = (y + height) / page.height.to!float;
                 }
                 region.x = x;
                 region.y = y;
