@@ -1,5 +1,10 @@
 module spine.animation.timeline.scale;
 
+import spine.animation.animation;
+import spine.animation.timeline.translate;
+import spine.bone.bone;
+import spine.skeleton.skeleton;
+
 export class ScaleTimeline : TranslateTimeline {
 
     this(int frameCount) {

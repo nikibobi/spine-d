@@ -1,5 +1,9 @@
 module spine.animation.state.data;
 
+import spine.animation.animation;
+import spine.skeleton.data;
+import spine.util.argnull;
+
 export class AnimationStateData {
 
     this(SkeletonData skeletonData) {

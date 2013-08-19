@@ -1,5 +1,10 @@
 module spine.skin.skin;
 
+import spine.attachment.attachment;
+import spine.skeleton.skeleton;
+import spine.slot.slot;
+import spine.util.argnull;
+
 export class Skin {
 
     this(string name) {
@@ -43,7 +48,7 @@ export class Skin {
         return name;
     }
 
-    package void attachAll(Skeleton skeleton, Skin oldSkin) {
+    void attachAll(Skeleton skeleton, Skin oldSkin) {
         foreach(key, value; oldSkin._attachments) {
             Slot slot = skeleton.slots[key.slotIndex];
             if(slot.attachment == value) {

@@ -1,5 +1,12 @@
 module spine.skeleton.skeleton;
 
+import spine.attachment.attachment;
+import spine.bone.bone;
+import spine.skeleton.data;
+import spine.skin.skin;
+import spine.slot.slot;
+import spine.util.argnull;
+
 export class Skeleton {
 
     this(SkeletonData data) {

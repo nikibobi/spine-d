@@ -1,5 +1,11 @@
 module spine.skeleton.data;
 
+import spine.animation.animation;
+import spine.bone.data;
+import spine.skin.skin;
+import spine.slot.data;
+import spine.util.argnull;
+
 export class SkeletonData {
 
     Skin defaultSkin;

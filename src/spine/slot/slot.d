@@ -1,5 +1,14 @@
 module spine.slot.slot;
 
+import std.algorithm : countUntil;
+
+import spine.attachment.attachment;
+import spine.bone.bone;
+import spine.skeleton.skeleton;
+import spine.slot.data;
+import spine.slot.data;
+import spine.util.argnull;
+
 export class Slot {
 
     this(SlotData data, Skeleton skeleton, Bone bone) {
@@ -94,7 +103,7 @@ export class Slot {
         }
     }
 
-    package void setToSetupPose(int slotIndex) {
+    void setToSetupPose(int slotIndex) {
         r = data.r;
         g = data.g;
         b = data.b;

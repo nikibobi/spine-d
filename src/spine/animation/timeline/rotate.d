@@ -1,5 +1,10 @@
 module spine.animation.timeline.rotate;
 
+import spine.animation.animation;
+import spine.animation.timeline.curve;
+import spine.bone.bone;
+import spine.skeleton.skeleton;
+
 export class RotateTimeline : CurveTimeline {
 
     protected enum int LAST_FRAME_TIME = -2;

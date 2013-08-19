@@ -1,5 +1,10 @@
 module spine.animation.timeline.color;
 
+import spine.animation.animation;
+import spine.animation.timeline.curve;
+import spine.skeleton.skeleton;
+import spine.slot.slot;
+
 export class ColorTimeline : CurveTimeline {
 
     protected enum int LAST_FRAME_TIME = -5;

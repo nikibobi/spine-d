@@ -1,5 +1,8 @@
 module spine.animation.timeline.curve;
 
+import spine.animation.timeline.timeline;
+import spine.skeleton.skeleton;
+
 export abstract class CurveTimeline : Timeline {
 
     protected enum float LINEAR = 0;

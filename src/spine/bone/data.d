@@ -1,5 +1,7 @@
 module spine.bone.data;
 
+import spine.util.argnull;
+
 export class BoneData {
 
     this(string name, BoneData parent = null) {

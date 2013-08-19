@@ -1,5 +1,8 @@
 module spine.attachment.region;
 
+import spine.attachment.attachment;
+import spine.bone.bone;
+
 export class RegionAttachment : Attachment {
 
     enum { X1, Y1, X2, Y2, X3, Y3, X4, Y4 }

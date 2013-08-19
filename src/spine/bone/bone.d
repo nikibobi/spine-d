@@ -1,5 +1,10 @@
 module spine.bone.bone;
 
+static import std.math;
+
+import spine.bone.data;
+import spine.util.argnull;
+
 export class Bone {
 
     static bool yDown;

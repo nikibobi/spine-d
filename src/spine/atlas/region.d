@@ -1,5 +1,7 @@
 module spine.atlas.region;
 
+import spine.atlas.page;
+
 export class AtlasRegion {
     AtlasPage page;
     string name;

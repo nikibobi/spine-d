@@ -1,5 +1,8 @@
 module spine.slot.data;
 
+import spine.bone.data;
+import spine.util.argnull;
+
 export class SlotData {
 
     this(string name, BoneData boneData) {

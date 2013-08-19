@@ -1,5 +1,16 @@
 module spine.attachment.atlasloader;
 
+import std.conv : to;
+
+import spine.atlas.atlas;
+import spine.atlas.region;
+import spine.attachment.attachment;
+import spine.attachment.loader;
+import spine.attachment.region;
+import spine.attachment.type;
+import spine.skin.skin;
+import spine.util.argnull;
+
 export class AtlasAttachmentLoader : AttachmentLoader {
 
     this(Atlas atlas) {

@@ -1,5 +1,12 @@
 module spine.animation.state.state;
 
+import std.range;
+
+import spine.animation.animation;
+import spine.animation.state.data;
+import spine.skeleton.skeleton;
+import spine.util.argnull;
+
 export class AnimationState {
 
     this(AnimationStateData data) {

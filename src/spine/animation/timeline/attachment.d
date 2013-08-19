@@ -1,5 +1,9 @@
 module spine.animation.timeline.attachment;
 
+import spine.animation.animation;
+import spine.animation.timeline.timeline;
+import spine.skeleton.skeleton;
+
 export class AttachmentTimeline : Timeline {
 
     this(int frameCount) {

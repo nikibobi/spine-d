@@ -1,5 +1,10 @@
 module spine.animation.timeline.translate;
 
+import spine.animation.animation;
+import spine.animation.timeline.curve;
+import spine.bone.bone;
+import spine.skeleton.skeleton;
+
 export class TranslateTimeline : CurveTimeline {
 
     protected enum int LAST_FRAME_TIME = -3;

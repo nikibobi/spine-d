@@ -1,5 +1,9 @@
 module spine.animation.animation;
 
+import spine.animation.timeline.timeline;
+import spine.skeleton.skeleton;
+import spine.util.argnull;
+
 export class Animation {
 
     this(string name, Timeline[] timelines, float duration) {
@@ -49,7 +53,7 @@ export class Animation {
             timeline.apply(skeleton, time, alpha);
     }
 
-    package static int binarySearch(float[] values, float target, int step) {
+    static int binarySearch(float[] values, float target, int step) {
         int low = 0;
         int high = values.length / step - 2;
         if(high == 0)
@@ -66,7 +70,7 @@ export class Animation {
         }
     }
 
-    package static int linearSearch(float[] values, float target, int step) {
+    static int linearSearch(float[] values, float target, int step) {
         for(int i = 0, last = values.length - step; i <= last; i += step)
             if(values[i] > target)
                 return i;

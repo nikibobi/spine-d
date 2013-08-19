@@ -1,5 +1,7 @@
 module spine.attachment.attachment;
 
+import spine.util.argnull;
+
 export abstract class Attachment {
 
     this(string name) {
