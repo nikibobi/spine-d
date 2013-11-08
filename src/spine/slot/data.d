@@ -91,6 +91,15 @@ export class SlotData {
         }
     }
 
+    @property {
+        bool additiveBlending() {
+            return _additiveBlending;
+        }
+        void additiveBlending(bool value) {
+            _additiveBlending = value;
+        }
+    }
+
     override string toString() {
         return name;
     }
@@ -100,4 +109,5 @@ private:
     BoneData _boneData;
     float _r, _g, _b, _a;
     string _attachmentName;
+    bool _additiveBlending;
 }
