@@ -25,6 +25,8 @@ export class Bone {
         }
     }
 
+    //TODO: Add skeleton prop and field
+
     @property {
         Bone parent() {
             return _parent;
@@ -33,6 +35,8 @@ export class Bone {
             _parent = value;
         }
     }
+
+    //TODO: Add Children array prop and field
 
     @property {
         float x() {
@@ -60,6 +64,8 @@ export class Bone {
             _rotation = value;
         }
     }
+
+    //TODO: Add RotationIK prop and field
 
     @property {
         float scaleX() {
@@ -160,6 +166,7 @@ export class Bone {
         }
     }
 
+    //TODO: remove flip parameters and use skeleton.flip
     void updateWorldTransform(bool flipX, bool flipY) {
         if(parent !is null) {
             worldX = x * parent.m00 + y * parent.m01 + parent.worldX;
@@ -171,10 +178,11 @@ export class Bone {
                 worldScaleX = scaleX;
                 worldScaleY = scaleY;
             }
+            //TODO: Use rotationIK here
             worldRotation = data.inheritRotation ? parent.worldRotation + rotation : rotation;
         } else {
             worldX = flipX ? -x : x;
-            worldY = flipY ? -y : y;
+            worldY = flipY ? -y : y; //TODO: flipY != yDown ? -y : y; 
             worldScaleX = scaleX;
             worldScaleY = scaleY;
             worldRotation = rotation;
@@ -182,6 +190,7 @@ export class Bone {
         float radians = worldRotation * std.math.PI / 180;
         float cos = std.math.cos(radians);
         float sin = std.math.sin(radians);
+        //TODO: logic has changed from here
         m00 = cos * worldScaleX;
         m10 = sin * worldScaleX;
         m01 = -sin * worldScaleY;
@@ -203,6 +212,9 @@ export class Bone {
         scaleX = data.scaleX;
         scaleY = data.scaleY;
     }
+
+    //TODO: Add worldToLocal method
+    //TODO: Add localToWorld method
 
     override string toString() {
         return data.name;

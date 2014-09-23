@@ -11,6 +11,7 @@ import spine.util.argnull;
 
 export class Slot {
 
+    //TODO: remove skeleton from constructor and use bone.skeleton
     this(SlotData data, Skeleton skeleton, Bone bone) {
         mixin(ArgNull!data);
         mixin(ArgNull!skeleton);
@@ -39,6 +40,7 @@ export class Slot {
         }
     }
 
+    //TODO: remove seter;  return bone.skeleton
     @property {
         Skeleton skeleton() {
             return _skeleton;
@@ -95,6 +97,7 @@ export class Slot {
     }
 
     @property {
+        //TODO: return bone.skeleton.time - _attachmentTime;
         float attachmentTime() {
             return _attachmentTime;
         }
@@ -102,6 +105,9 @@ export class Slot {
             _attachmentTime = skeleton.time - value;
         }
     }
+
+    //TODO: add attachment vertices prop and field
+    //TODO: add attachment verticies count prop and field
 
     void setToSetupPose(int slotIndex) {
         r = data.r;

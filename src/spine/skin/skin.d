@@ -12,6 +12,8 @@ export class Skin {
         this.name = name;
     }
 
+    //TODO: add unittest
+
     @property {
         string name() {
             return _name;
