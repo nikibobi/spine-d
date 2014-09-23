@@ -9,7 +9,7 @@ export class Bone {
 
     static bool yDown;
 
-    this(BoneData data, Bone parent) {
+    this(BoneData data, Bone parent = null) {
         mixin(ArgNull!data);
         this.data = data;
         this.parent = parent;
