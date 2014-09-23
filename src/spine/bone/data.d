@@ -10,6 +10,8 @@ export class BoneData {
         this.parent = parent;
         this.scaleX = 1;
         this.scaleY = 1;
+        this.inheritScale = true;
+        this.inheritRotation = true;
     }
 
     unittest {
