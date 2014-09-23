@@ -7,6 +7,7 @@ export class RegionAttachment : Attachment {
 
     enum { X1, Y1, X2, Y2, X3, Y3, X4, Y4 }
 
+    //TODO: maybe make these properties
     float x;
     float y;
     float scaleX;
@@ -15,6 +16,8 @@ export class RegionAttachment : Attachment {
     float width;
     float height;
 
+    //TODO: add float r, g, b, a props and set them to 1 in the ctor
+    //TODO: add string path prop
     Object rendererObject;
     float regionOffsetX;
     float regionOffsetY;
@@ -97,6 +100,7 @@ export class RegionAttachment : Attachment {
         offset[Y4] = localYCos + localX2Sin;
     }
 
+    //TODO: rename to computeWorldVertices; remove x and y params and use bone.skeleton. x and y
     void computeVertices(float x, float y, Bone bone, float[] vertices) {
         x += bone.worldX;
         y += bone.worldY;

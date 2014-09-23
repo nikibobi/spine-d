@@ -18,6 +18,8 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         _atlas = atlas;
     }
 
+    //TODO: implement the new AttachmentLoader
+
     Attachment NewAttachment(Skin skin, AttachmentType type, string name) {
         switch(type) {
             case AttachmentType.Region:
