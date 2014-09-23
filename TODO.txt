@@ -1,0 +1,104 @@
+Searching 45 files for "TODO"
+
+F:\Github\spine-d\src\spine\animation\animation.d:
+   79  
+   80      override hash_t toHash() {
+   81:         return cast(hash_t)_duration; //TODO: use better hash
+   82      }
+   83  
+
+F:\Github\spine-d\src\spine\bone\bone.d:
+   26      }
+   27  
+   28:     //TODO: Add skeleton prop and field
+   29  
+   30      @property {
+   ..
+   37      }
+   38  
+   39:     //TODO: Add Children array prop and field
+   40  
+   41      @property {
+   ..
+   66      }
+   67  
+   68:     //TODO: Add RotationIK prop and field
+   69  
+   70      @property {
+   ..
+  167      }
+  168  
+  169:     //TODO: remove flip parameters and use skeleton.flip
+  170      void updateWorldTransform(bool flipX, bool flipY) {
+  171          if(parent !is null) {
+  ...
+  179                  worldScaleY = scaleY;
+  180              }
+  181:             //TODO: Use rotationIK here
+  182              worldRotation = data.inheritRotation ? parent.worldRotation + rotation : rotation;
+  183          } else {
+  184              worldX = flipX ? -x : x;
+  185:             worldY = flipY ? -y : y; //TODO: flipY != yDown ? -y : y; 
+  186              worldScaleX = scaleX;
+  187              worldScaleY = scaleY;
+  ...
+  191          float cos = std.math.cos(radians);
+  192          float sin = std.math.sin(radians);
+  193:         //TODO: logic has changed from here
+  194          m00 = cos * worldScaleX;
+  195          m10 = sin * worldScaleX;
+  ...
+  214      }
+  215  
+  216:     //TODO: Add worldToLocal method
+  217:     //TODO: Add localToWorld method
+  218  
+  219      override string toString() {
+
+F:\Github\spine-d\src\spine\skeleton\json.d:
+    2  
+    3  export class SkeletonJson {
+    4:     //TODO: implement using std.json;
+    5  }
+
+F:\Github\spine-d\src\spine\skin\skin.d:
+   13      }
+   14  
+   15:     //TODO: add unittest
+   16  
+   17      @property {
+
+F:\Github\spine-d\src\spine\slot\slot.d:
+   12  export class Slot {
+   13  
+   14:     //TODO: remove skeleton from constructor and use bone.skeleton
+   15      this(SlotData data, Skeleton skeleton, Bone bone) {
+   16          mixin(ArgNull!data);
+   ..
+   41      }
+   42  
+   43:     //TODO: remove seter;  return bone.skeleton
+   44      @property {
+   45          Skeleton skeleton() {
+   ..
+   98  
+   99      @property {
+  100:         //TODO: return bone.skeleton.time - _attachmentTime;
+  101          float attachmentTime() {
+  102              return _attachmentTime;
+  ...
+  107      }
+  108  
+  109:     //TODO: add attachment vertices prop and field
+  110:     //TODO: add attachment verticies count prop and field
+  111  
+  112      void setToSetupPose(int slotIndex) {
+
+F:\Github\spine-d\src\spine\util\property.d:
+   29          static if(cases.length > 0)
+   30          {
+   31:             //TODO: make cases more advanced
+   32              //snake_case
+   33              //camelCase
+
+18 matches across 6 files
