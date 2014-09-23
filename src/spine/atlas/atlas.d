@@ -11,9 +11,15 @@ import spine.atlas.all;
 
 export class Atlas {
     
+    //TODO: add this(string path, TextureLoader textureLoader)
+
     this(File reader, string dir, TextureLoader textureLoader) {
         load(reader, dir, textureLoader);
     }
+
+    //TODO: add this(AtlasPage[] pages, AtlasRegion[] regions)
+
+    //TODO: add unittest
     
     private void load(File reader, string imagesDir, TextureLoader textureLoader) {
         this._textureLoader = textureLoader;
@@ -120,6 +126,8 @@ export class Atlas {
         tuple[i] = line[lastMatch..line.length].strip();
         return i + 1;
     }
+
+    //TODO: implement flipV method
     
     AtlasRegion findRegion(string name) {
         foreach(region; _regions)
