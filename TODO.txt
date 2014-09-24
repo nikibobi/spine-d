@@ -1,11 +1,102 @@
 Searching 45 files for "TODO"
 
 F:\Github\spine-d\src\spine\animation\animation.d:
-   79  
-   80      override hash_t toHash() {
-   81:         return cast(hash_t)_duration; //TODO: use better hash
-   82      }
-   83  
+   42      }
+   43  
+   44:     //TODO: change signeture to use events and last time
+   45      void apply(Skeleton skeleton, float time, bool loop) {
+   46          mix(skeleton, time, loop, 1);
+   47      }
+   48  
+   49:     //TODO: change signeture to use events and last time
+   50      void mix(Skeleton skeleton, float time, bool loop, float alpha) {
+   51          mixin(ArgNull!skeleton);
+   ..
+   81  
+   82      override hash_t toHash() {
+   83:         return cast(hash_t)_duration; //TODO: use better hash
+   84      }
+   85  
+
+F:\Github\spine-d\src\spine\animation\state\state.d:
+    8  import spine.util.argnull;
+    9  
+   10: //TODO: needs a lot of changes
+   11  export class AnimationState {
+   12  
+   ..
+  153      QueueEntry[] _queue;
+  154  
+  155:     //TODO: remove this and implement TrackEntry class in trackentry.d
+  156      struct QueueEntry {
+  157          Animation animation;
+
+F:\Github\spine-d\src\spine\animation\timeline\timeline.d:
+    4  
+    5  export interface Timeline {
+    6:     //TODO: change signeture to use events and last time
+    7      void apply(Skeleton skeleton, float time, float alpha);
+    8  }
+
+F:\Github\spine-d\src\spine\atlas\atlas.d:
+   12  export class Atlas {
+   13      
+   14:     //TODO: add this(string path, TextureLoader textureLoader)
+   15  
+   16      this(File reader, string dir, TextureLoader textureLoader) {
+   ..
+   18      }
+   19  
+   20:     //TODO: add this(AtlasPage[] pages, AtlasRegion[] regions)
+   21  
+   22:     //TODO: add unittest
+   23      
+   24      private void load(File reader, string imagesDir, TextureLoader textureLoader) {
+   ..
+  128      }
+  129  
+  130:     //TODO: implement flipV method
+  131      
+  132      AtlasRegion findRegion(string name) {
+
+F:\Github\spine-d\src\spine\attachment\atlasloader.d:
+   19      }
+   20  
+   21:     //TODO: implement the new AttachmentLoader
+   22  
+   23      Attachment NewAttachment(Skin skin, AttachmentType type, string name) {
+
+F:\Github\spine-d\src\spine\attachment\loader.d:
+    6  
+    7  export interface AttachmentLoader {
+    8:     //TODO: remove this methid and implement the others
+    9      Attachment NewAttachment(Skin skin, AttachmentType type, string name);
+   10  
+   11:     //TODO: implement newRegionAttachment method
+   12:     //TODO: implement newMeshAttachment method
+   13:     //TODO: implement newSkinnedMeshAttachment method
+   14:     //TODO: implement newBoundingBoxAttachment method
+   15  }
+
+F:\Github\spine-d\src\spine\attachment\region.d:
+    8      enum { X1, Y1, X2, Y2, X3, Y3, X4, Y4 }
+    9  
+   10:     //TODO: maybe make these properties
+   11      float x;
+   12      float y;
+   ..
+   17      float height;
+   18  
+   19:     //TODO: add float r, g, b, a props and set them to 1 in the ctor
+   20:     //TODO: add string path prop
+   21      Object rendererObject;
+   22      float regionOffsetX;
+   ..
+  101      }
+  102  
+  103:     //TODO: rename to computeWorldVertices; remove x and y params and use bone.skeleton. x and y
+  104      void computeVertices(float x, float y, Bone bone, float[] vertices) {
+  105          x += bone.worldX;
 
 F:\Github\spine-d\src\spine\bone\bone.d:
    26      }
@@ -101,4 +192,4 @@ F:\Github\spine-d\src\spine\util\property.d:
    32              //snake_case
    33              //camelCase
 
-18 matches across 6 files
+37 matches across 12 files
