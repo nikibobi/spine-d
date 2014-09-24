@@ -52,7 +52,7 @@ export class DrawOrderTimeline : Timeline {
         Slot[] drawOrder = skeleton.drawOrder;
         Slot[] slots = skeleton.slots;
         int[] drawOrderToSetupIndex = drawOrders[frameIndex];
-        if(drawOrderToSetupIndex == null) {
+        if(drawOrderToSetupIndex is null) {
             drawOrder[] = slots[];
         } else {
             for(int i = 0; i < drawOrderToSetupIndex.length; i++)

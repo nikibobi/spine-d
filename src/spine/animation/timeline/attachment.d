@@ -54,7 +54,7 @@ export class AttachmentTimeline : Timeline {
             frameIndex = Animation.binarySearch(frames, time, 1) - 1;
 
         string attachmentName = attachmentNames[frameIndex];
-        skeleton.slots[slotIndex].attachment = attachmentName == null ? null : skeleton.getAttachment(slotIndex, attachmentName);
+        skeleton.slots[slotIndex].attachment = attachmentName is null ? null : skeleton.getAttachment(slotIndex, attachmentName);
     }
 
 private:
