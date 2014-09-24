@@ -7,6 +7,7 @@ import spine.animation.state.data;
 import spine.skeleton.skeleton;
 import spine.util.argnull;
 
+//TODO: needs a lot of changes
 export class AnimationState {
 
     this(AnimationStateData data) {
@@ -151,6 +152,7 @@ private:
     float _mixTime, _mixDuration;
     QueueEntry[] _queue;
 
+    //TODO: remove this and implement TrackEntry class in trackentry.d
     struct QueueEntry {
         Animation animation;
         bool loop;

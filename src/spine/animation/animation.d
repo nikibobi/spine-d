@@ -41,10 +41,12 @@ export class Animation {
         }
     }
 
+    //TODO: change signeture to use events and last time
     void apply(Skeleton skeleton, float time, bool loop) {
         mix(skeleton, time, loop, 1);
     }
 
+    //TODO: change signeture to use events and last time
     void mix(Skeleton skeleton, float time, bool loop, float alpha) {
         mixin(ArgNull!skeleton);
         if(loop && duration)
