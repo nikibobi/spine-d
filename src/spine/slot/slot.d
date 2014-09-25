@@ -11,13 +11,10 @@ import spine.util.argnull;
 
 export class Slot {
 
-    //TODO: remove skeleton from constructor and use bone.skeleton
-    this(SlotData data, Skeleton skeleton, Bone bone) {
+    this(SlotData data, Bone bone) {
         mixin(ArgNull!data);
-        mixin(ArgNull!skeleton);
         mixin(ArgNull!bone);
         this.data = data;
-        this.skeleton = skeleton;
         this.bone = bone;
         setToSetupPose();
     }
@@ -40,13 +37,9 @@ export class Slot {
         }
     }
 
-    //TODO: remove seter;  return bone.skeleton
     @property {
         Skeleton skeleton() {
-            return _skeleton;
-        }
-        private void skeleton(Skeleton value) {
-            _skeleton = value;
+            return bone.skeleton;
         }
     }
 
@@ -93,23 +86,38 @@ export class Slot {
         void attachment(Attachment value) {
             _attachment = value;
             _attachmentTime = skeleton.time;
+            _attachmentVerticesCount = 0;
         }
     }
 
     @property {
-        //TODO: return bone.skeleton.time - _attachmentTime;
         float attachmentTime() {
-            return _attachmentTime;
+            return skeleton.time - _attachmentTime;
         }
         void attachmentTime(float value) {
             _attachmentTime = skeleton.time - value;
         }
     }
 
-    //TODO: add attachment vertices prop and field
-    //TODO: add attachment verticies count prop and field
+    @property {
+        float[] attachmentVertices() {
+            return _attachmentVertices;
+        }
+        void attachmentVertices(float[] value) {
+            _attachmentVertices = value;
+        }
+    }
 
-    void setToSetupPose(int slotIndex) {
+    @property {
+        int attachmentVerticesCount() {
+            return _attachmentVerticesCount;
+        }
+        void attachmentVerticesCount(int value) {
+            _attachmentVerticesCount = value;
+        }
+    }
+
+    public void setToSetupPose(int slotIndex) {
         r = data.r;
         g = data.g;
         b = data.b;
@@ -128,8 +136,9 @@ export class Slot {
 private:
     SlotData _data;
     Bone _bone;
-    Skeleton _skeleton;
     float _r, _g, _b, _a;
     Attachment _attachment;
     float _attachmentTime;
+    float[] _attachmentVertices;
+    int _attachmentVerticesCount;
 }

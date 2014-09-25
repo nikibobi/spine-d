@@ -16,17 +16,26 @@ export class Skeleton {
         bones = new Bone[data.bones.length];
         foreach(boneData; data.bones) {
             Bone parent = boneData is null ? null : bones[countUntil(data.bones, boneData.parent)];
-            bones = bones~new Bone(boneData, parent);
+            bones = bones~new Bone(boneData, this, parent);
+        }
+
+        foreach(b; bones) {
+            if(b.parent !is null) {
+                b.parent.children = b.parent.children ~ b; 
+            }
         }
 
         slots = new Slot[data.slots.length];
         drawOrder = new Slot[data.slots.length];
         foreach(slotData; data.slots) {
             Bone bone = bones[countUntil(data.bones, slotData.boneData)];
-            Slot slot = new Slot(slotData, this, bone);
+            Slot slot = new Slot(slotData, bone);
             slots = slots~slot;
             drawOrder = drawOrder~slot;
         }
+
+        //TODO: add ik contraints
+        //TODO: call updateCache();
 
         r, g, b, a = 1f;
     }
@@ -163,9 +172,12 @@ export class Skeleton {
         }
     }
 
+    //TODO: implement updateCache()
+
+    //TODO: change with ik rotation and constraints
     void updateWorldTransform() {
         foreach(bone; bones)
-            bone.updateWorldTransform(flipX, flipY);
+            bone.updateWorldTransform();
     }
 
     void setToSetupPose() {
@@ -173,11 +185,13 @@ export class Skeleton {
         setSlotsToSetupPose();
     }
 
+    //TODO: add ik constraints
     void setBonesToSetupPose() {
         foreach(bone; bones)
             bone.setToSetupPose();
     }
 
+    //TODO: include draw order changes
     void setSlotsToSetupPose() {
         foreach(i, slot; slots)
             slot.setToSetupPose(i);
@@ -222,6 +236,7 @@ export class Skeleton {
         setSkin(skin);
     }
 
+    //TODO: this has changed
     void setSkin(Skin newSkin) {
         if(skin !is null && newSkin !is null)
             newSkin.attachAll(this, skin);
@@ -260,6 +275,8 @@ export class Skeleton {
         }
         throw new Exception("Slot not found: "~slotName);
     }
+
+    //TODO: implement findIkConstraint(string ikConstraintName)
 
     void update(float delta) {
         time = time + delta;
