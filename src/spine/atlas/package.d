@@ -1,4 +1,4 @@
-module spine.atlas.all;
+module spine.atlas;
 
 public {
     import spine.atlas.atlas;

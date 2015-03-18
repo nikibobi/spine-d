@@ -1,4 +1,4 @@
-module spine.animation.all;
+module spine.animation;
 
 public {
     import spine.animation.animation;

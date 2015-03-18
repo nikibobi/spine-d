@@ -1,4 +1,4 @@
-module spine.slot.all;
+module spine.slot;
 
 public {
     import spine.slot.data;

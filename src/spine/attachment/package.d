@@ -1,4 +1,4 @@
-module spine.attachment.all;
+module spine.attachment;
 
 public {
     import spine.attachment.atlasloader;

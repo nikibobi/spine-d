@@ -1,4 +1,4 @@
-module spine.bone.all;
+module spine.bone;
 
 public {
     import spine.bone.bone;

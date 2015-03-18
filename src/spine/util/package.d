@@ -1,4 +1,4 @@
-module spine.util.all;
+module spine.util;
 
 public {
     import spine.util.argnull;

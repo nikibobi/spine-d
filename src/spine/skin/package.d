@@ -1,4 +1,4 @@
-module spine.skin.all;
+module spine.skin;
 
 public {
     import spine.skin.skin;
