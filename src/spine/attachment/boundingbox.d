@@ -1,7 +1,7 @@
 module spine.attachment.boundingbox;
 
 import spine.attachment.attachment;
-import spine.bone.all;
+import spine.bone;
 
 export class BoundingBoxAttachment : Attachment {
     

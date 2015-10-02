@@ -7,7 +7,7 @@ import std.conv;
 import std.math : abs;
 import std.algorithm : countUntil, findSkip;
 
-import spine.atlas.all;
+import spine.atlas;
 
 export class Atlas {
     
