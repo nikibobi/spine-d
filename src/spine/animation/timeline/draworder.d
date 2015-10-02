@@ -2,6 +2,7 @@ module spine.animation.timeline.draworder;
 
 import spine.animation.animation;
 import spine.animation.timeline.timeline;
+import spine.event.event;
 import spine.skeleton.skeleton;
 import spine.slot.slot;
 
@@ -39,7 +40,7 @@ export class DrawOrderTimeline : Timeline {
         _drawOrders[frameIndex] = drawOrder;
     }
 
-    void apply(Skeleton skeleton, float time, float alpha) {
+    void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
         if(time < frames[0])
             return; //time is before last frame
 
@@ -47,7 +48,7 @@ export class DrawOrderTimeline : Timeline {
         if(time >= frames[$ - 1]) //time is after last frame
             frameIndex = frames.length - 1;
         else
-            frameIndex = Animation.binarySearch(frames, time, 1) - 1;
+            frameIndex = Animation.binarySearch(frames, time) - 1;
 
         Slot[] drawOrder = skeleton.drawOrder;
         Slot[] slots = skeleton.slots;

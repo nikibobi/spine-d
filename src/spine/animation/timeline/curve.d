@@ -1,6 +1,7 @@
 module spine.animation.timeline.curve;
 
 import spine.animation.timeline.timeline;
+import spine.event.event;
 import spine.skeleton.skeleton;
 
 export abstract class CurveTimeline : Timeline {
@@ -17,7 +18,7 @@ export abstract class CurveTimeline : Timeline {
         return _curves.length / 6 + 1;
     }
 
-    abstract void apply(Skeleton skeleton, float time, float alpha);
+    abstract void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha);
 
     void setLinear(int frameIndex) {
         _curves[frameIndex * 6] = LINEAR;

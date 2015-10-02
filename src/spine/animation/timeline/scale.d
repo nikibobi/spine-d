@@ -3,6 +3,7 @@ module spine.animation.timeline.scale;
 import spine.animation.animation;
 import spine.animation.timeline.translate;
 import spine.bone.bone;
+import spine.event.event;
 import spine.skeleton.skeleton;
 
 export class ScaleTimeline : TranslateTimeline {
@@ -11,7 +12,7 @@ export class ScaleTimeline : TranslateTimeline {
         super(frameCount);
     }
 
-    override void apply(Skeleton skeleton, float time, float alpha) {
+    override void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
         if(time < frames[0])
             return;
 

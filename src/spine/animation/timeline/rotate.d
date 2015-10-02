@@ -3,6 +3,7 @@ module spine.animation.timeline.rotate;
 import spine.animation.animation;
 import spine.animation.timeline.curve;
 import spine.bone.bone;
+import spine.event.event;
 import spine.skeleton.skeleton;
 
 export class RotateTimeline : CurveTimeline {
@@ -39,7 +40,7 @@ export class RotateTimeline : CurveTimeline {
         frames[frameIndex + 1] = angle;
     }
 
-    override void apply(Skeleton skeleton, float time, float alpha) {
+    override void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
         if(time < frames[0])
             return;
 

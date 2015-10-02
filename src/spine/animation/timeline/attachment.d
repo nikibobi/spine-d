@@ -1,6 +1,7 @@
 module spine.animation.timeline.attachment;
 
 import spine.animation.animation;
+import spine.event.event;
 import spine.animation.timeline.timeline;
 import spine.skeleton.skeleton;
 
@@ -43,15 +44,18 @@ export class AttachmentTimeline : Timeline {
         attachmentNames[frameIndex] = attachmentName;
     }
 
-    void apply(Skeleton skeleton, float time, float alpha) {
-        if(time < frames[0])
+    void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
+        if(time < frames[0]) {
+            if(lastTime > time)
+                apply(skeleton, lastTime, float.max, null, 0);
             return;
+        } else if(lastTime > time) {
+            lastTime = -1;
+        }
 
-        int frameIndex;
-        if(time >= frames[$ - 1])
-            frameIndex = frames.length - 1;
-        else
-            frameIndex = Animation.binarySearch(frames, time, 1) - 1;
+        int frameIndex = (time >= frames[$ - 1] ? frames.length - 1 : Animation.binarySearch(frames, time) - 1);
+        if(frames[frameIndex] < lastTime)
+            return;
 
         string attachmentName = attachmentNames[frameIndex];
         skeleton.slots[slotIndex].attachment = attachmentName is null ? null : skeleton.getAttachment(slotIndex, attachmentName);

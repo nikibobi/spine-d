@@ -3,6 +3,7 @@ module spine.animation.timeline.translate;
 import spine.animation.animation;
 import spine.animation.timeline.curve;
 import spine.bone.bone;
+import spine.event.event;
 import spine.skeleton.skeleton;
 
 export class TranslateTimeline : CurveTimeline {
@@ -41,7 +42,7 @@ export class TranslateTimeline : CurveTimeline {
         frames[frameIndex + 2] = y;
     }
 
-    override void apply(Skeleton skeleton, float time, float alpha) {
+    override void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
         if(time < frames[0])
             return;
 
