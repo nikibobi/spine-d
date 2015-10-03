@@ -7,6 +7,7 @@ public {
     import spine.animation.timeline.attachment;
     import spine.animation.timeline.color;
     import spine.animation.timeline.draworder;
+    import spine.animation.timeline.ffd;
     import spine.animation.timeline.rotate;
     import spine.animation.timeline.scale;
     import spine.animation.timeline.timeline;
