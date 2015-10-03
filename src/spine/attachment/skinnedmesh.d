@@ -111,11 +111,11 @@ export class SkinnedMeshAttachment : Attachment {
     }
 
     @property {
-        Object renderObject() {
-            return _renderObject;
+        Object rendererObject() {
+            return _rendererObject;
         }
-        void renderObject(Object value) {
-            _renderObject = value;
+        void rendererObject(Object value) {
+            _rendererObject = value;
         }
     }
 
@@ -305,7 +305,7 @@ private:
 
     int _hullLength;
     string _path;
-    Object _renderObject;
+    Object _rendererObject;
     float _regionU, _regionV, _regionU2, _regionV2;
     bool _regionRotate;
     int[] _edges;
