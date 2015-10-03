@@ -7,5 +7,6 @@ public {
     import spine.attachment.loader;
     import spine.attachment.mesh;
     import spine.attachment.region;
+    import spine.attachment.skinnedmesh;
     import spine.attachment.type;
 }
