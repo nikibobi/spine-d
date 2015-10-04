@@ -103,6 +103,24 @@ export class BoneData {
     }
 
     @property {
+        bool flipX() {
+            return _flipX;
+        }
+        void flipX(bool value) {
+            _flipX = value;
+        }
+    }
+
+    @property {
+        bool flipY() {
+            return _flipY;
+        }
+        void flipY(bool value) {
+            _flipY = value;
+        }
+    }
+
+    @property {
         bool inheritScale() {
             return _inheritScale;
         }
@@ -131,6 +149,6 @@ private:
     float _x, _y;
     float _rotation;
     float _scaleX, _scaleY;
-    bool _inheritScale;
-    bool _inheritRotation;
+    bool _flipX, _flipY;
+    bool _inheritScale, _inheritRotation;
 }
