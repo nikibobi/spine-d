@@ -45,7 +45,7 @@ export class EventTimeline : Timeline {
 		if(firedEvents is null)
 			return;
 		if(lastTime > time) {
-			apply(skeleton, lastTime, int.max, firedEvents, alpha);
+			apply(skeleton, lastTime, cast(float)int.max, firedEvents, alpha);
 			lastTime = -1f;
 		} else if(lastTime >= frames[$ - 1]) {
 			return;
