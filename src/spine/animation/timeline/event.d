@@ -13,7 +13,7 @@ export class EventTimeline : Timeline {
 	}
 
 	@property {
-	    float[] frames() {
+	    ref float[] frames() {
 	        return _frames;
 	    }
 	    void frames(float[] value) {
@@ -22,7 +22,7 @@ export class EventTimeline : Timeline {
 	}
 
 	@property {
-	    Event[] events() {
+	    ref Event[] events() {
 	        return _events;
 	    }
 	    void events(Event[] value) {
