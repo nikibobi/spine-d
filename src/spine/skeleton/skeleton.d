@@ -213,7 +213,7 @@ export class Skeleton {
         return -1;
     }
 
-    Slot findBone(string slotName) {
+    Slot findSlot(string slotName) {
         mixin(ArgNull!slotName);
         foreach(slot; slots)
             if(slot.data.name == slotName)
