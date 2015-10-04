@@ -1,9 +1,11 @@
 module spine.animation.timeline.ffd;
 
+import spine.animation.animation;
 import spine.animation.timeline.curve;
 import spine.attachment.attachment;
 import spine.event.event;
 import spine.skeleton.skeleton;
+import spine.slot.slot;
 
 export class FFDTimeline : CurveTimeline {
 
@@ -50,8 +52,8 @@ export class FFDTimeline : CurveTimeline {
     }
 
     void setFrame(int frameIndex, float time, float[] vertices) {
-        frames[frameIndex] = time;
-        vertices[frameIndex] = vertices;
+        this.frames[frameIndex] = time;
+        this.vertices[frameIndex] = vertices;
     }
 
     override void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
