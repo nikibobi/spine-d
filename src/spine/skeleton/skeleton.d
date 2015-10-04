@@ -2,6 +2,7 @@ module spine.skeleton.skeleton;
 
 import spine.attachment.attachment;
 import spine.bone.bone;
+import spine.ikconstraint.ikconstraint;
 import spine.skeleton.data;
 import spine.skin.skin;
 import spine.slot.slot;
@@ -16,13 +17,10 @@ export class Skeleton {
         bones = new Bone[data.bones.length];
         foreach(boneData; data.bones) {
             Bone parent = boneData is null ? null : bones[countUntil(data.bones, boneData.parent)];
-            bones = bones~new Bone(boneData, this, parent);
-        }
-
-        foreach(b; bones) {
-            if(b.parent !is null) {
-                b.parent.children = b.parent.children ~ b; 
-            }
+            Bone bone = new Bone(boneData, this, parent);
+            if(parent !is null)
+                parent.children ~= bone;
+            bones ~= bone;
         }
 
         slots = new Slot[data.slots.length];
@@ -30,11 +28,13 @@ export class Skeleton {
         foreach(slotData; data.slots) {
             Bone bone = bones[countUntil(data.bones, slotData.boneData)];
             Slot slot = new Slot(slotData, bone);
-            slots = slots~slot;
-            drawOrder = drawOrder~slot;
+            slots ~= slot;
+            drawOrder ~= slot;
         }
 
-        //TODO: add ik contraints
+        ikConstraints = new IkConstraint[data.ikConstraints.length];
+        foreach(ikConstraintData; data.ikConstraints)
+            ikConstraints ~= new IkConstraint(ikConstraintData, this);
         //TODO: call updateCache();
 
         r, g, b, a = 1f;
@@ -50,7 +50,7 @@ export class Skeleton {
     }
 
     @property {
-        Bone[] bones() {
+        ref Bone[] bones() {
             return _bones;
         }
         private void bones(Bone[] value) {
@@ -59,7 +59,7 @@ export class Skeleton {
     }
 
     @property {
-        Slot[] slots() {
+        ref Slot[] slots() {
             return _slots;
         }
         private void slots(Slot[] value) {
@@ -68,11 +68,20 @@ export class Skeleton {
     }
 
     @property {
-        Slot[] drawOrder() {
+        ref Slot[] drawOrder() {
             return _drawOrder;
         }
         private void drawOrder(Slot[] value) {
             _drawOrder = value;
+        }
+    }
+
+    @property {
+        ref IkConstraint[] ikConstraints() {
+            return _ikConstraints;
+        }
+        private void ikConstraints(IkConstraint[] value) {
+            _ikConstraints = value;
         }
     }
 
@@ -122,7 +131,7 @@ export class Skeleton {
     }
 
     @property {
-        float time() {
+        ref float time() {
             return _time;
         }
         void time(float value) {
@@ -185,14 +194,19 @@ export class Skeleton {
         setSlotsToSetupPose();
     }
 
-    //TODO: add ik constraints
     void setBonesToSetupPose() {
         foreach(bone; bones)
             bone.setToSetupPose();
+
+        foreach(ikConstraint; ikConstraints) {
+            ikConstraint.bendDirection = ikConstraint.data.bendDirection;
+            ikConstraint.mix = ikConstraint.data.mix;
+        }
     }
 
-    //TODO: include draw order changes
     void setSlotsToSetupPose() {
+        drawOrder = slots.dup;
+
         foreach(i, slot; slots)
             slot.setToSetupPose(i);
     }
@@ -236,10 +250,21 @@ export class Skeleton {
         setSkin(skin);
     }
 
-    //TODO: this has changed
     void setSkin(Skin newSkin) {
-        if(skin !is null && newSkin !is null)
-            newSkin.attachAll(this, skin);
+        if(newSkin !is null) {
+            if(skin !is null) {
+                newSkin.attachAll(this, skin);
+            } else {
+                foreach(i, slot; slots) {
+                    string name = slot.data.attachmentName;
+                    if(name !is null) {
+                        Attachment attachment = newSkin.getAttachment(i, name);
+                        if(attachment !is null)
+                            slot.attachment = attachment;
+                    }
+                }
+            } 
+        }
         skin = newSkin;
     }
 
@@ -276,10 +301,16 @@ export class Skeleton {
         throw new Exception("Slot not found: "~slotName);
     }
 
-    //TODO: implement findIkConstraint(string ikConstraintName)
+    IkConstraint findIkConstraint(string ikConstraintName) {
+        mixin(ArgNull!ikConstraintName);
+        foreach(ikConstraint; ikConstraints)
+            if(ikConstraint.data.name == ikConstraintName)
+                return ikConstraint;
+        return null;
+    }
 
     void update(float delta) {
-        time = time + delta;
+        time += delta;
     }
 
 private:
@@ -287,6 +318,8 @@ private:
     Bone[] _bones;
     Slot[] _slots;
     Slot[] _drawOrder;
+    IkConstraint[] _ikConstraints;
+    //TODO: add boneCache
     Skin _skin;
     float _r, _g, _b, _a;
     float _time;
