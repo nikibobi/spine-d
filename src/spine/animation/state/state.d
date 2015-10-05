@@ -4,10 +4,11 @@ import std.range;
 
 import spine.animation.animation;
 import spine.animation.state.data;
+import spine.event.event;
 import spine.skeleton.skeleton;
 import spine.util.argnull;
 
-//TODO: needs a lot of changes
+//TODO: needs events implementation
 export class AnimationState {
 
     this(AnimationStateData data) {
@@ -25,137 +26,303 @@ export class AnimationState {
     }
 
     @property {
-        Animation animation() {
-            return _animation;
+        float timeScale() {
+            return _timeScale;
         }
-        private void animation(Animation value) {
-            _animation = value;
-        }
-    }
-
-    @property {
-        ref float time() {
-            return _time;
-        }
-        void time(float value) {
-            _time = value;
-        }
-    }
-
-    @property {
-        bool loop() {
-            return _loop;
-        }
-        void loop(bool value) {
-            _loop = value;
+        void timeScale(float value) {
+            _timeScale = value;
         }
     }
 
     void update(float delta) {
-        time += delta;
-        _previousTime += delta;
-        _mixTime += delta;
+        delta *= timeScale;
+        for(int i = 0; i < _tracks.length; i++) {
+            TrackEntry current = _tracks[i];
+            if(current is null)
+                continue;
+            float trackDelta = delta * current.timeScale;
+            float time = current.time + trackDelta;
+            float endTime = current.endTime;
 
-        if(!_queue.empty) {
-            QueueEntry entry = _queue.front;
-            if(time >= entry.delay) {
-                setAnimationInternal(entry.animation, entry.loop);
-                _queue.popFront();
+            current.time = time;
+            if(current.previous !is null) {
+                current.previous.time = current.previous.time + trackDelta;
+                current.mixTime += trackDelta;
+            }
+
+            // Check if completed the animation or a loop iteration.
+            if(current.loop ? (current.lastTime % endTime > time % endTime) : (current.lastTime < endTime && time >= endTime)) {
+                int count = cast(int)(time / endTime);
+                //TODO: implement complete event
+                /*current.onComplete(this, i, count);
+                if(complete !is null)
+                    complete(this, i, count);*/
+            }
+
+            TrackEntry next = current.next;
+            if(next !is null) {
+                next.time = current.lastTime - next.delay;
+                if(next.time >= 0)
+                    setCurrent(i, next);
+            } else {
+                // End non-looping animation when it reaches its end time and there is no next entry.
+                if (!current.loop && current.lastTime >= current.endTime)
+                    clearTrack(i);
             }
         }
     }
 
     void apply(Skeleton skeleton) {
-        if(animation is null)
-            return;
-        if(_previous !is null) {
-            _previous.apply(skeleton, _previousTime, _previousLoop);
-            float alpha = _mixTime / _mixDuration;
-            if(alpha >= 1) {
-                alpha = 1;
-                _previous = null;
+        for(int i = 0; i < _tracks.length; i++) {
+            TrackEntry current = _tracks[i];
+            if(current is null)
+                continue;
+
+            _events.length = 0;
+            float time = current.time;
+            bool loop = current.loop;
+            if(!loop && time > current.endTime)
+                time = current.endTime;
+            TrackEntry previous = current.previous;
+            if(previous is null) {
+                if(current.mix == 1)
+                    current.animation.apply(skeleton, current.lastTime, time, loop, _events);
+                else
+                    current.animation.mix(skeleton, current.lastTime, time, loop, _events, current.mix);
+            } else {
+                float previousTime = previous.time;
+                if(!previous.loop && previousTime > previous.endTime)
+                    previousTime = previous.endTime;
+                previous.animation.apply(skeleton, previousTime, previousTime, previous.loop, null);
+
+                float alpha = current.mixTime / current.mixDuration * current.mix;
+                if(alpha >= 1) {
+                    alpha = 1;
+                    current.previous = null;
+                }
+                current.animation.mix(skeleton, current.lastTime, time, loop, _events, alpha);
             }
-            animation.mix(skeleton, time, loop, alpha);
-        } else {
-            animation.apply(skeleton, time, loop);
+
+            for(int ii = 0; ii < _events.length; ii++) {
+                Event e = _events[ii];
+                //TODO: implement events
+                /*current.onEvent(this, i, e);
+                if(event !is null)
+                    event(this, i, e);*/
+            }
+
+            current.lastTime = current.time;
         }
     }
 
-    void addAnimation(string animationName, bool loop, float delay = 0) {
+    void clearTracks() {
+        for(int i = 0; i < _tracks.length; i++)
+            clearTrack(i);
+        _tracks.length = 0;
+    }
+
+    void clearTrack(int trackIndex) {
+        if(trackIndex >= _tracks.length)
+            return;
+        TrackEntry current = _tracks[trackIndex];
+        if(current is null)
+            return;
+
+        //TODO: implement events
+        /*current.onEnd(this, trackIndex);
+        if(end !is null)
+            end(this, trackIndex);*/
+        _tracks[trackIndex] = null;
+    }
+
+    private TrackEntry expandToIndex(int index) {
+        if(index < _tracks.length)
+            return _tracks[index];
+        while (index >= _tracks.length)
+            _tracks = null ~ _tracks;
+        return null;
+    }
+
+    private void setCurrent(int index, TrackEntry entry) {
+        TrackEntry current = expandToIndex(index);
+        if(current !is null) {
+            TrackEntry previous = current.previous;
+            current.previous = null;
+
+            //TODO: implement delegates
+            /*current.onEnd(this, index);
+            if(end !is null)
+                end(this, index);*/
+            entry.mixDuration = data.getMix(current.animation, entry.animation);
+            if(entry.mixDuration > 0) {
+                entry.mixTime = 0;
+                // If a mix is in progress, mix from the closest animation.
+                if(previous !is null && current.mixTime / current.mixDuration < 0.5f)
+                    entry.previous = previous;
+                else
+                    entry.previous = current;
+            }
+        }
+
+        _tracks[index] = entry;
+
+        //TODO: events!
+        /*entry.onStart(this, index);
+        if(start !is null)
+            start(this, index);*/
+    }
+
+    TrackEntry setAnimation(int trackIndex, string animationName, bool loop) {
+        Animation animation = data.skeletonData.findAnimation(animationName);
+        if(animation is null)
+            throw new Exception("Animation not found: " ~ animationName);
+        return setAnimation(trackIndex, animation, loop);
+    }
+
+    TrackEntry setAnimation(int trackIndex, Animation animation, bool loop) {
+        mixin(ArgNull!animation);
+        TrackEntry entry = new TrackEntry();
+        entry.animation = animation;
+        entry.loop = loop;
+        entry.time = 0;
+        entry.endTime = animation.duration;
+        setCurrent(trackIndex, entry);
+        return entry;
+    }
+
+    TrackEntry addAnimation(int trackIndex, string animationName, bool loop, float delay = 0) {
         Animation animation = data.skeletonData.findAnimation(animationName);
         if(animation is null)
             throw new Exception("Animation not found: "~animationName);
-        addAnimation(animation, loop, delay);
+        return addAnimation(trackIndex, animation, loop, delay);
     }
 
-    void addAnimation(Animation animation, bool loop, float delay = 0) {
+    TrackEntry addAnimation(int trackIndex, Animation animation, bool loop, float delay = 0) {
+        mixin(ArgNull!animation);
+        TrackEntry entry = new TrackEntry();
+        entry.animation = animation;
+        entry.loop = loop;
+        entry.time = 0;
+        entry.endTime = animation.duration;
+
+        TrackEntry last = expandToIndex(trackIndex);
+        if(last !is null) {
+            while(last.next !is null)
+                last = last.next;
+            last.next = entry;
+        } else {
+            _tracks[trackIndex] = entry;
+        }
+
         if(delay <= 0) {
-            Animation previousAnimation = _queue.empty ? this.animation : _queue[$-1].animation;
-            if(previousAnimation !is null)
-                delay += previousAnimation.duration - data.getMix(previousAnimation, animation);
+            if(last !is null)
+                delay += last.endTime - data.getMix(last.animation, animation);
             else
                 delay = 0;
         }
-        _queue ~= QueueEntry(animation, loop, delay);
+        entry.delay = delay;
+        return entry;
     }
 
-    private void setAnimationInternal(Animation animation, bool loop) {
-        _previous = null;
-        if(animation !is null && this.animation !is null) {
-            _mixDuration = data.getMix(this.animation, animation);
-            if(_mixDuration > 0) {
-                _mixTime = 0;
-                _previous = this.animation;
-                _previousTime = this.time;
-                _previousLoop = this.loop;
-            }
-        }
-        this.animation = animation;
-        this.loop = loop;
-        this.time = 0;
-    }
-
-    void setAnimation(string animationName, bool loop) {
-        Animation animation = data.skeletonData.findAnimation(animationName);
-        if(animation is null)
-            throw new Exception("Animation not found: "~animationName);
-        setAnimation(animation, loop);
-    }
-
-    void setAnimation(Animation animation, bool loop) {
-        _queue = [];
-        setAnimationInternal(animation, loop);
-    }
-
-    void clearAnimation() {
-        _queue = [];
-        _previous = null;
-        animation = null;
-    }
-
-    bool isComplete() {
-        return animation is null || time >= animation.duration;
+    TrackEntry getCurrent(int trackIndex) {
+        if(trackIndex >= _tracks.length)
+            return null;
+        return _tracks[trackIndex];
     }
 
     override string toString() {
-        return animation !is null && animation.name !is null ? animation.name : super.toString();
+        return "<temp>";
     }
 
 private:
     AnimationStateData _data;
-    Animation _animation;
-    float _time;
-    bool _loop;
-    Animation _previous;
-    float _previousTime;
-    bool _previousLoop;
-    float _mixTime, _mixDuration;
-    QueueEntry[] _queue;
+    TrackEntry[] _tracks;
+    Event[] _events;
+    float _timeScale = 1;
 
     //TODO: remove this and implement TrackEntry class in trackentry.d
-    struct QueueEntry {
-        Animation animation;
-        bool loop;
-        float delay;
+    class TrackEntry {
+
+        @property {
+            Animation animation() {
+                return _animation;
+            }
+            private void animation(Animation value) {
+                _animation = value;
+            }
+        }
+
+        @property {
+            float delay() {
+                return _delay;
+            }
+            void delay(float value) {
+                _delay = value;
+            }
+        }
+
+        @property {
+            float time() {
+                return _time;
+            }
+            void time(float value) {
+                _time = value;
+            }
+        }
+
+        @property {
+            float lastTime() {
+                return _lastTime;
+            }
+            void lastTime(float value) {
+                _lastTime = value;
+            }
+        }
+
+        @property {
+            float endTime() {
+                return _endTime;
+            }
+            void endTime(float value) {
+                _endTime = value;
+            }
+        }
+
+        @property {
+            float timeScale() {
+                return _timeScale;
+            }
+            void timeScale(float value) {
+                _timeScale = value;
+            }
+        }
+
+        @property {
+            float mix() {
+                return _mix;
+            }
+            void mix(float value) {
+                _mix = value;
+            }
+        }
+
+        @property {
+            bool loop() {
+                return _loop;
+            }
+            void loop(bool value) {
+                _loop = value;
+            }
+        }
+
+        override string toString() {
+            return animation is null ? "<none>" : animation.name;
+        }
+    package:
+        TrackEntry next, previous;
+        Animation _animation;
+        bool _loop;
+        float _delay, _time, _lastTime = -1, _endTime, _timeScale = 1;
+        float mixTime, mixDuration, _mix = 1;
     }
 }

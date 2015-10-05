@@ -2,6 +2,7 @@ module spine.animation.timeline.color;
 
 import spine.animation.animation;
 import spine.animation.timeline.curve;
+import spine.event.event;
 import spine.skeleton.skeleton;
 import spine.slot.slot;
 
@@ -42,7 +43,7 @@ export class ColorTimeline : CurveTimeline {
         frames[frameIndex + 4] = a;
     }
 
-    override void apply(Skeleton skeleton, float time, float alpha) {
+    override void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
         if(time < frames[0])
             return;
 

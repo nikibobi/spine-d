@@ -1,6 +1,7 @@
 module spine.animation.animation;
 
 import spine.animation.timeline.timeline;
+import spine.event.event;
 import spine.skeleton.skeleton;
 import spine.util.argnull;
 
@@ -41,21 +42,27 @@ export class Animation {
         }
     }
 
-    //TODO: change signeture to use events and last time
-    void apply(Skeleton skeleton, float time, bool loop) {
-        mix(skeleton, time, loop, 1);
-    }
-
-    //TODO: change signeture to use events and last time
-    void mix(Skeleton skeleton, float time, bool loop, float alpha) {
+    void apply(Skeleton skeleton, float lastTime, float time, bool loop, Event[] events) {
         mixin(ArgNull!skeleton);
-        if(loop && duration)
+        if(loop && duration != 0) {
             time %= duration;
+            lastTime %= duration;
+        }
         foreach(timeline; timelines)
-            timeline.apply(skeleton, time, alpha);
+            timeline.apply(skeleton, lastTime, time, events, 1);
     }
 
-    static int binarySearch(float[] values, float target, int step) {
+    void mix(Skeleton skeleton, float lastTime, float time, bool loop, Event[] events, float alpha) {
+        mixin(ArgNull!skeleton);
+        if(loop && duration != 0) {
+            time %= duration;
+            lastTime %= duration;
+        }
+        foreach(timeline; timelines)
+            timeline.apply(skeleton, lastTime, time, events, alpha);
+    }
+
+    static int binarySearch(float[] values, float target, int step=1) {
         int low = 0;
         int high = values.length / step - 2;
         if(high == 0)
