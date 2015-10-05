@@ -16,8 +16,8 @@ export class RegionAttachment : Attachment {
     float width;
     float height;
 
-    //TODO: add float r, g, b, a props and set them to 1 in the ctor
-    //TODO: add string path prop
+    float r, g, b, a;
+    string path;
     Object rendererObject;
     float regionOffsetX;
     float regionOffsetY;
@@ -30,6 +30,7 @@ export class RegionAttachment : Attachment {
         super(name);
         this.scaleX = 1;
         this.scaleY = 1;
+        r = g = b = a = 1;
     }
 
     @property {
