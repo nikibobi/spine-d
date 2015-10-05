@@ -6,7 +6,7 @@ import std.string;
 import std.conv;
 import std.math : abs;
 import std.algorithm : countUntil, findSkip;
-import std.path : dirName;
+import std.path : buildPath, dirName;
 
 import spine.atlas;
 import spine.util.argnull;
@@ -63,7 +63,7 @@ export class Atlas {
                 else if (direction == "xy")
                     page.uWrap = page.vWrap = TextureWrap.Repeat;
                 
-                _textureLoader.load(page, text(imagesDir, line)); //TODO: test this text() function
+                _textureLoader.load(page, buildPath(imagesDir, line));
                 
                 _pages ~= page;
                 
