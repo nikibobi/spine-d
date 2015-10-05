@@ -9,6 +9,7 @@ public {
     import spine.animation.timeline.draworder;
     import spine.animation.timeline.flip;
     import spine.animation.timeline.flipx;
+    import spine.animation.timeline.flipy;
     import spine.animation.timeline.rotate;
     import spine.animation.timeline.scale;
     import spine.animation.timeline.timeline;
