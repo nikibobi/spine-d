@@ -2,13 +2,13 @@ module spine.skeleton.data;
 
 import spine.animation.animation;
 import spine.bone.data;
+import spine.event.data;
+import spine.ikconstraint.data;
 import spine.skin.skin;
 import spine.slot.data;
 import spine.util.argnull;
 
 export class SkeletonData {
-
-    Skin defaultSkin;
 
     @property {
         string name() {
@@ -20,7 +20,7 @@ export class SkeletonData {
     }
 
     @property {
-        BoneData[] bones() {
+        ref BoneData[] bones() {
             return _bones;
         }
         private void bones(BoneData[] value) {
@@ -29,7 +29,7 @@ export class SkeletonData {
     }
 
     @property {
-        SlotData[] slots() {
+        ref SlotData[] slots() {
             return _slots;
         }
         private void slots(SlotData[] value) {
@@ -38,7 +38,7 @@ export class SkeletonData {
     }
 
     @property {
-        Skin[] skins() {
+        ref Skin[] skins() {
             return _skins;
         }
         private void skins(Skin[] value) {
@@ -47,17 +47,75 @@ export class SkeletonData {
     }
 
     @property {
-        Animation[] animations() {
+        Skin defaultSkin() {
+            return _defaultSkin;
+        }
+        void defaultSkin(Skin value) {
+            _defaultSkin = value;
+        }
+    }
+
+    @property {
+        ref EventData[] events() {
+            return _events;
+        }
+        void events(EventData[] value) {
+            _events = value;
+        }
+    }
+
+    @property {
+        ref Animation[] animations() {
             return _animations;
         }
-        private void animations(Animation[] value) {
+        void animations(Animation[] value) {
             _animations = value;
         }
     }
 
-    void addBone(BoneData bone) {
-        mixin(ArgNull!bone);
-        bones = bones~bone;
+    @property {
+        ref IkConstraintData[] ikConstraints() {
+            return _ikConstraints;
+        }
+        void ikConstraints(IkConstraintData[] value) {
+            _ikConstraints = value;
+        }
+    }
+
+    @property {
+        float width() {
+            return _width;
+        }
+        void width(float value) {
+            _width = value;
+        }
+    }
+
+    @property {
+        float height() {
+            return _height;
+        }
+        void height(float value) {
+            _height = value;
+        }
+    }
+
+    @property {
+        string ver() {
+            return _ver;
+        }
+        void ver(string value) {
+            _ver = value;
+        }
+    }
+
+    @property {
+        string hash() {
+            return _hash;
+        }
+        void hash(string value) {
+            _hash = value;
+        }
     }
 
     BoneData findBone(string boneName) {
@@ -76,11 +134,6 @@ export class SkeletonData {
         return -1;
     }
 
-    void addSlot(SlotData slot) {
-        mixin(ArgNull!slot);
-        slots = slots~slot;
-    }
-
     SlotData findSlot(string slotName) {
         mixin(ArgNull!slotName);
         foreach(slot; slots)
@@ -97,11 +150,6 @@ export class SkeletonData {
         return -1;
     }
 
-    void addSkin(Skin skin) {
-        mixin(ArgNull!skin);
-        skins = skins~skin;
-    }
-
     Skin findSkin(string skinName) {
         mixin(ArgNull!skinName);
         foreach(skin; skins)
@@ -110,9 +158,12 @@ export class SkeletonData {
         return null;
     }
 
-    void addAnimation(Animation animation) {
-        mixin(ArgNull!animation);
-        animations = animations~animation;
+    EventData findEvent(string eventDataName) {
+        mixin(ArgNull!eventDataName);
+        foreach(eventData; events)
+            if(eventData.name == eventDataName)
+                return eventData;
+        return null;
     }
 
     Animation findAnimation(string animationName) {
@@ -120,6 +171,14 @@ export class SkeletonData {
         foreach(animation; animations)
             if(animation.name == animationName)
                 return animation;
+        return null;
+    }
+
+    IkConstraintData findIkConstraint(string ikConstraintName) {
+        mixin(ArgNull!ikConstraintName);
+        foreach(ikConstraint; ikConstraints)
+            if(ikConstraint.name == ikConstraintName)
+                return ikConstraint;
         return null;
     }
 
@@ -132,5 +191,10 @@ private:
     BoneData[] _bones;
     SlotData[] _slots;
     Skin[] _skins;
+    Skin _defaultSkin;
+    EventData[] _events;
     Animation[] _animations;
+    IkConstraintData[] _ikConstraints;
+    float _width, _height;
+    string _ver, _hash, _imagesPath;
 }

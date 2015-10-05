@@ -6,6 +6,7 @@ public {
     import spine.attachment;
     import spine.bone;
     import spine.event;
+    import spine.ikconstraint;
     import spine.skeleton;
     import spine.skin;
     import spine.slot;

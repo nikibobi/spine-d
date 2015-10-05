@@ -12,6 +12,7 @@ export class Bone {
 
     this(BoneData data, Skeleton skeleton, Bone parent = null) {
         mixin(ArgNull!data);
+        mixin(ArgNull!skeleton);
         this.data = data;
         this.skeleton = skeleton;
         this.parent = parent;
@@ -46,7 +47,7 @@ export class Bone {
     }
 
     @property {
-        Bone[] children() {
+        ref Bone[] children() {
             return _children;
         }
         public void children(Bone[] value) {
@@ -105,6 +106,24 @@ export class Bone {
         }
         void scaleY(float value) {
             _scaleY = value;
+        }
+    }
+
+    @property {
+        bool flipX() {
+            return _flipX;
+        }
+        void flipX(bool value) {
+            _flipX = value;
+        }
+    }
+
+    @property {
+        bool flipY() {
+            return _flipY;
+        }
+        void flipY(bool value) {
+            _flipY = value;
         }
     }
 
@@ -189,6 +208,24 @@ export class Bone {
         }
     }
 
+    @property {
+        bool worldFlipX() {
+            return _worldFlipX;
+        }
+        void worldFlipX(bool value) {
+            _worldFlipX = value;
+        }
+    }
+
+    @property {
+        bool worldFlipY() {
+            return _worldFlipY;
+        }
+        void worldFlipY(bool value) {
+            _worldFlipY = value;
+        }
+    }
+
     void updateWorldTransform() {
         if(parent !is null) {
             worldX = x * parent.m00 + y * parent.m01 + parent.worldX;
@@ -201,25 +238,29 @@ export class Bone {
                 worldScaleY = scaleY;
             }
             worldRotation = data.inheritRotation ? parent.worldRotation + rotationIK : rotationIK;
+            worldFlipX = parent.worldFlipX != flipX;
+            worldFlipY = parent.worldFlipY != flipY;
         } else {
             worldX = skeleton.flipX ? -x : x;
             worldY = skeleton.flipY != yDown ? -y : y;
             worldScaleX = scaleX;
             worldScaleY = scaleY;
             worldRotation = rotationIK;
+            worldFlipX = skeleton.flipX != flipX;
+            worldFlipY = skeleton.flipY != flipY;
         }
         float radians = worldRotation * std.math.PI / 180;
         float cos = std.math.cos(radians);
         float sin = std.math.sin(radians);
 
-        if(skeleton.flipX) {
+        if(worldFlipX) {
             m00 = -cos * worldScaleX;
             m01 = sin * worldScaleY;
         } else {
             m00 = cos * worldScaleX;
             m01 = -sin * worldScaleY;
         }
-        if (skeleton.flipY != yDown) {
+        if (worldFlipY != yDown) {
             m10 = -sin * worldScaleX;
             m11 = -cos * worldScaleY;
         } else {
@@ -235,14 +276,16 @@ export class Bone {
         rotationIK = rotation;
         scaleX = data.scaleX;
         scaleY = data.scaleY;
+        flipX = data.flipX;
+        flipY = data.flipY;
     }
 
     void worldToLocal(float worldX, float worldY, out float localX, out float localY) {
         float dx = worldX - this.worldX;
         float dy = worldY - this.worldY;
-        if (skeleton.flipX != (skeleton.flipY != yDown)) {
-            m00 = m00 * -1;
-            m11 = m11 * -1;
+        if (worldFlipX != (worldFlipY != yDown)) {
+            m00 = -m00;
+            m11 = -m11;
         }
         float invDet = 1 / (m00 * m11 - m01 * m10);
         localX = (dx * m00 * invDet - dy * m01 * invDet);
@@ -266,8 +309,10 @@ private:
     float _x, _y;
     float _rotation, _rotationIK;
     float _scaleX, _scaleY;
+    bool _flipX, _flipY;
     float _m00, _m01, _m10, _m11;
     float _worldX, _worldY;
     float _worldRotation;
     float _worldScaleX, _worldScaleY;
+    bool _worldFlipX, _worldFlipY;
 }
