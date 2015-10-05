@@ -6,23 +6,34 @@ import std.string;
 import std.conv;
 import std.math : abs;
 import std.algorithm : countUntil, findSkip;
+import std.path : dirName;
 
 import spine.atlas;
+import spine.util.argnull;
 
 export class Atlas {
     
-    //TODO: add this(string path, TextureLoader textureLoader)
+    this(string path, TextureLoader textureLoader) {
+        auto reader = File(path, "r");
+        scope(exit) reader.close();
+        load(reader, dirName(path), textureLoader);
+    }
 
     this(File reader, string dir, TextureLoader textureLoader) {
         load(reader, dir, textureLoader);
     }
 
-    //TODO: add this(AtlasPage[] pages, AtlasRegion[] regions)
+    this(AtlasPage[] pages, AtlasRegion[] regions) {
+        _pages = pages;
+        _regions = regions;
+        _textureLoader = null;
+    }
 
     //TODO: add unittest
     
     private void load(File reader, string imagesDir, TextureLoader textureLoader) {
-        this._textureLoader = textureLoader;
+        mixin(ArgNull!textureLoader);
+        _textureLoader = textureLoader;
         
         auto tuple = new string[4];
         AtlasPage page;
@@ -52,7 +63,7 @@ export class Atlas {
                 else if (direction == "xy")
                     page.uWrap = page.vWrap = TextureWrap.Repeat;
                 
-                _textureLoader.load(page, text(imagesDir, line));
+                _textureLoader.load(page, text(imagesDir, line)); //TODO: test this text() function
                 
                 _pages ~= page;
                 
@@ -123,11 +134,16 @@ export class Atlas {
             tuple[i] = line[lastMatch..comma - lastMatch].strip();
             lastMatch = comma + 1;
         }
-        tuple[i] = line[lastMatch..line.length].strip();
+        tuple[i] = line[lastMatch..$].strip();
         return i + 1;
     }
 
-    //TODO: implement flipV method
+    void flipV() {
+        foreach(region; _regions) {
+            region.v = 1 - region.v;
+            region.v2 = 1 - region.v2;
+        }
+    }
     
     AtlasRegion findRegion(string name) {
         foreach(region; _regions)
@@ -137,6 +153,8 @@ export class Atlas {
     }
     
     void dispose() {
+        if(_textureLoader is null)
+            return;
         foreach(page; _pages)
             _textureLoader.unload(page.rendererObject);
     }
