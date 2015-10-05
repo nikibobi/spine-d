@@ -39,6 +39,12 @@ export class AttachmentTimeline : Timeline {
         }
     }
 
+    @property {
+        int frameCount() {
+            return frames.length;
+        }
+    }
+
     void setFrame(int frameIndex, float time, string attachmentName) {
         frames[frameIndex] = time;
         attachmentNames[frameIndex] = attachmentName;

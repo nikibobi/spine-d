@@ -1,6 +1,7 @@
 module spine.slot.data;
 
 import spine.bone.data;
+import spine.slot.blendmode;
 import spine.util.argnull;
 
 export class SlotData {
@@ -92,11 +93,11 @@ export class SlotData {
     }
 
     @property {
-        bool additiveBlending() {
-            return _additiveBlending;
+        BlendMode blendMode() {
+            return _blendMode;
         }
-        void additiveBlending(bool value) {
-            _additiveBlending = value;
+        void blendMode(BlendMode value) {
+            _blendMode = value;
         }
     }
 
@@ -109,5 +110,5 @@ private:
     BoneData _boneData;
     float _r, _g, _b, _a;
     string _attachmentName;
-    bool _additiveBlending;
+    BlendMode _blendMode;
 }
