@@ -5,7 +5,7 @@ import std.file;
 import std.string;
 import std.conv;
 import std.math : abs;
-import std.algorithm : countUntil, findSkip;
+import std.algorithm : findSkip;
 import std.path : buildPath, dirName;
 
 import spine.atlas;
@@ -128,10 +128,10 @@ export class Atlas {
         assert(colon != -1); //Invalid Line
         int i = 0, lastMatch = colon + 1;
         for (; i < 3; i++) {
-            auto comma = countUntil(line, lastMatch, ',');
+            auto comma = line.indexOf(',', lastMatch);
             if (comma == -1)
-                assert(i != 0); //Invalid Line
-            tuple[i] = line[lastMatch..comma - lastMatch].strip();
+                break;
+            tuple[i] = line[lastMatch..comma].strip();
             lastMatch = comma + 1;
         }
         tuple[i] = line[lastMatch..$].strip();
