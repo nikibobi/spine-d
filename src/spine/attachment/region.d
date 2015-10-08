@@ -101,10 +101,9 @@ export class RegionAttachment : Attachment {
         offset[Y4] = localYCos + localX2Sin;
     }
 
-    //TODO: rename to computeWorldVertices; remove x and y params and use bone.skeleton. x and y
-    void computeVertices(float x, float y, Bone bone, float[] vertices) {
-        x += bone.worldX;
-        y += bone.worldY;
+    void computeWorldVertices(Bone bone, float[] vertices) {
+        float x = bone.skeleton.x + bone.worldX;
+        float y = bone.skeleton.y + bone.worldY;
         float m00 = bone.m00;
         float m01 = bone.m01;
         float m10 = bone.m10;
