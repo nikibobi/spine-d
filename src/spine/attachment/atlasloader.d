@@ -27,14 +27,16 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         if(region is null)
             throw new Exception("Region not found in atlas: " ~ path ~ "(region attachment: " ~ name ~ ")");
         RegionAttachment attachment = new RegionAttachment(name);
-        attachment.rendererObject = region;
-        attachment.setUVs(region.u, region.v, region.u2, region.v2, region.rotate);
-        attachment.regionOffsetX = region.offsetX;
-        attachment.regionOffsetY = region.offsetY;
-        attachment.regionWidth = region.width;
-        attachment.regionHeight = region.height;
-        attachment.regionOriginalWidth = region.originalWidth;
-        attachment.regionOriginalHeight = region.originalHeight;
+        with(attachment) {
+            rendererObject = region;
+            setUVs(region.u, region.v, region.u2, region.v2, region.rotate);
+            regionOffsetX = region.offsetX;
+            regionOffsetY = region.offsetY;
+            regionWidth = region.width;
+            regionHeight = region.height;
+            regionOriginalWidth = region.originalWidth;
+            regionOriginalHeight = region.originalHeight;
+        }
         return attachment;
     }
 
@@ -43,18 +45,20 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         if(region is null)
             throw new Exception("Region not found in atlas: " ~ path ~ " (mesh attachment: " ~ name ~ ")");
         MeshAttachment attachment = new MeshAttachment(name);
-        attachment.rendererObject = region;
-        attachment.regionU = region.u;
-        attachment.regionV = region.v;
-        attachment.regionU2 = region.u2;
-        attachment.regionV2 = region.v2;
-        attachment.regionRotate = region.rotate;
-        attachment.regionOffsetX = region.offsetX;
-        attachment.regionOffsetY = region.offsetY;
-        attachment.regionWidth = region.width;
-        attachment.regionHeight = region.height;
-        attachment.regionOriginalWidth = region.originalWidth;
-        attachment.regionOriginalHeight = region.originalHeight;
+        with(attachment) {
+            rendererObject = region;
+            regionU = region.u;
+            regionV = region.v;
+            regionU2 = region.u2;
+            regionV2 = region.v2;
+            regionRotate = region.rotate;
+            regionOffsetX = region.offsetX;
+            regionOffsetY = region.offsetY;
+            regionWidth = region.width;
+            regionHeight = region.height;
+            regionOriginalWidth = region.originalWidth;
+            regionOriginalHeight = region.originalHeight;
+        }
         return attachment;
     }
 
@@ -63,18 +67,20 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         if(region is null)
             throw new Exception("Region not found in atlas: " ~ path ~ " (skinned mesh attachment: " ~ name ~ ")");
         SkinnedMeshAttachment attachment = new SkinnedMeshAttachment(name);
-        attachment.rendererObject = region;
-        attachment.regionU = region.u;
-        attachment.regionV = region.v;
-        attachment.regionU2 = region.u2;
-        attachment.regionV2 = region.v2;
-        attachment.regionRotate = region.rotate;
-        attachment.regionOffsetX = region.offsetX;
-        attachment.regionOffsetY = region.offsetY;
-        attachment.regionWidth = region.width;
-        attachment.regionHeight = region.height;
-        attachment.regionOriginalWidth = region.originalWidth;
-        attachment.regionOriginalHeight = region.originalHeight;
+        with(attachment) {
+            rendererObject = region;
+            regionU = region.u;
+            regionV = region.v;
+            regionU2 = region.u2;
+            regionV2 = region.v2;
+            regionRotate = region.rotate;
+            regionOffsetX = region.offsetX;
+            regionOffsetY = region.offsetY;
+            regionWidth = region.width;
+            regionHeight = region.height;
+            regionOriginalWidth = region.originalWidth;
+            regionOriginalHeight = region.originalHeight;
+        }
         return attachment;
     }
 
