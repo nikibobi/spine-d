@@ -15,26 +15,26 @@ export class Skeleton {
         this.data = data;
 
         bones = new Bone[data.bones.length];
-        foreach(boneData; data.bones) {
-            Bone parent = boneData is null ? null : bones[countUntil(data.bones, boneData.parent)];
+        foreach(i, boneData; data.bones) {
+            Bone parent = boneData.parent is null ? null : bones[countUntil(data.bones, boneData.parent)];
             Bone bone = new Bone(boneData, this, parent);
             if(parent !is null)
                 parent.children ~= bone;
-            bones ~= bone;
+            bones[i] = bone;
         }
 
         slots = new Slot[data.slots.length];
         drawOrder = new Slot[data.slots.length];
-        foreach(slotData; data.slots) {
+        foreach(i, slotData; data.slots) {
             Bone bone = bones[countUntil(data.bones, slotData.boneData)];
             Slot slot = new Slot(slotData, bone);
-            slots ~= slot;
-            drawOrder ~= slot;
+            slots[i] = slot;
+            drawOrder[i] = slot;
         }
 
         ikConstraints = new IkConstraint[data.ikConstraints.length];
-        foreach(ikConstraintData; data.ikConstraints)
-            ikConstraints ~= new IkConstraint(ikConstraintData, this);
+        foreach(i, ikConstraintData; data.ikConstraints)
+            ikConstraints[i] = new IkConstraint(ikConstraintData, this);
         //TODO: call updateCache();
 
         r, g, b, a = 1f;
