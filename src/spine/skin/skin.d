@@ -29,7 +29,9 @@ export class Skin {
     }
 
     Attachment getAttachment(int slotIndex, string name) {
-        return _attachments[Key(slotIndex, name)];
+        if(Key(slotIndex, name) in _attachments)
+            return _attachments[Key(slotIndex, name)];
+        return null;
     }
 
     void findNamesForSlot(int slotIndex, string[] names) {
