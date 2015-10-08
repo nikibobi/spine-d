@@ -39,15 +39,21 @@ export class Atlas {
         AtlasPage page;
         while (true) {
             auto line = reader.readln();
-            if (line is null) 
+            if (line == "")
                 break;
             if (line.strip().length == 0)
                 page = null;
             else if (page is null) {
                 page = new AtlasPage;
-                page.name = line;
+                page.name = line.strip();
+
+                if(readTuple(reader, tuple) == 2) { // size is only optional for an atlas packed with an old TexturePacker.
+                    page.width = tuple[0].to!int;
+                    page.height = tuple[1].to!int;
+                    readTuple(reader, tuple);
+                }
                 
-                page.format = readValue(reader).to!Format;
+                page.format = tuple[0].to!Format;
                 
                 readTuple(reader, tuple);
                 page.minFilter = tuple[0].to!TextureFilter;
@@ -69,7 +75,7 @@ export class Atlas {
                 
             } else {
                 auto region = new AtlasRegion;
-                region.name = line;
+                region.name = line.strip();
                 region.page = page;
                 
                 region.rotate = readValue(reader).to!bool;
