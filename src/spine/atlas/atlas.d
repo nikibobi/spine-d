@@ -69,7 +69,7 @@ export class Atlas {
                 else if (direction == "xy")
                     page.uWrap = page.vWrap = TextureWrap.Repeat;
                 
-                _textureLoader.load(page, buildPath(imagesDir, line));
+                _textureLoader.load(page, buildPath(imagesDir, line.strip()));
                 
                 _pages ~= page;
                 
