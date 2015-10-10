@@ -5,7 +5,6 @@ import std.file;
 import std.string;
 import std.conv;
 import std.math : abs;
-import std.algorithm : findSkip;
 import std.path : buildPath, dirName;
 
 import spine.atlas;
@@ -124,8 +123,9 @@ export class Atlas {
     
     private static string readValue(File reader) {
         auto line = reader.readln();
-        assert(findSkip(line, ":"));//Chops everything before ":" and leaves everything as is
-        return line.strip();
+        auto colon = line.indexOf(':');
+        assert(colon != -1);
+        return line[colon + 1..$].strip();
     }
     
     private static int readTuple(File reader, string[] tuple) {
