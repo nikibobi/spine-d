@@ -16,6 +16,10 @@ export class Slot {
         mixin(ArgNull!bone);
         this.data = data;
         this.bone = bone;
+        r = 1f;
+        g = 1f;
+        b = 1f;
+        a = 1f;
         setToSetupPose();
     }
 

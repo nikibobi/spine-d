@@ -8,6 +8,10 @@ extern class MeshAttachment : Attachment {
 
     this(string name) {
         super(name);
+        r = 1f;
+        g = 1f;
+        b = 1f;
+        a = 1f;
     }
 
     @property {

@@ -11,7 +11,10 @@ export class SlotData {
         mixin(ArgNull!boneData);
         this.name = name;
         this.boneData = boneData;
-        r, g, b, a = 1f;
+        r = 1f;
+        g = 1f;
+        b = 1f;
+        a = 1f;
     }
 
     unittest {

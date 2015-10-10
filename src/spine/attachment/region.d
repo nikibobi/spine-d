@@ -30,7 +30,10 @@ export class RegionAttachment : Attachment {
         super(name);
         this.scaleX = 1;
         this.scaleY = 1;
-        r = g = b = a = 1;
+        r = 1f;
+        g = 1f;
+        b = 1f;
+        a = 1f;
     }
 
     @property {

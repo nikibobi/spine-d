@@ -37,7 +37,10 @@ export class Skeleton {
             ikConstraints[i] = new IkConstraint(ikConstraintData, this);
         //TODO: call updateCache();
 
-        r, g, b, a = 1f;
+        r = 1f;
+        g = 1f;
+        b = 1f;
+        a = 1f;
     }
 
     @property {
