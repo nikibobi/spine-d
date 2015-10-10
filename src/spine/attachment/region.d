@@ -37,7 +37,7 @@ export class RegionAttachment : Attachment {
     }
 
     @property {
-        float[8] offset() {
+        ref float[8] offset() {
             return _offset;
         }
         private void offset(float[8] value) {
@@ -46,7 +46,7 @@ export class RegionAttachment : Attachment {
     }
 
     @property {
-        float[8] uvs() {
+        ref float[8] uvs() {
             return _uvs;
         }
         private void uvs(float[8] value) {
