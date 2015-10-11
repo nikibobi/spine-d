@@ -17,7 +17,7 @@ import spine.util.argnull;
 
 export class AtlasAttachmentLoader : AttachmentLoader {
 
-    this(Atlas[] atlases) {
+    this(Atlas[] atlases ...) {
         mixin(ArgNull!atlases);
         _atlases = atlases;
     }

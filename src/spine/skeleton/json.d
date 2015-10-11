@@ -29,7 +29,7 @@ import spine.util.json;
 
 export class SkeletonJson {
 
-    this(Atlas[] atlasArray) {
+    this(Atlas[] atlasArray ...) {
         this(new AtlasAttachmentLoader(atlasArray));
     }
 
