@@ -276,7 +276,7 @@ export class SkinnedMeshAttachment : Attachment {
                 int nn = bones[v++] + v;
                 for(; v < nn; v++, b += 3) {
                     Bone bone = skeletonBones[bones[v]];
-                    float vx = weights[b], vy = weights[b + 1], weight = weights[b + 1];
+                    float vx = weights[b], vy = weights[b + 1], weight = weights[b + 2];
                     wx += (vx * bone.m00 + vy * bone.m01 + bone.worldX) * weight;
                     wy += (vx * bone.m10 + vy * bone.m11 + bone.worldY) * weight;
                 }
