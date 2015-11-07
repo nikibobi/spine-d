@@ -89,8 +89,8 @@ export class Atlas {
                 
                 region.u = x / page.width.to!float;
                 region.v = y / page.height.to!float;
-                region.u2 = (x + region.rotate?height:width) / page.width.to!float;
-                region.v2 = (y + region.rotate?width:height) / page.height.to!float;
+                region.u2 = (x + (region.rotate?height:width)) / page.width.to!float;
+                region.v2 = (y + (region.rotate?width:height)) / page.height.to!float;
                 region.x = x;
                 region.y = y;
                 region.width = abs(width);
