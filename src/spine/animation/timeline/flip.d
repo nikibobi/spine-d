@@ -45,7 +45,7 @@ export abstract class FlipTimeline : Timeline {
     void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
         if(time < frames[0]) {
             if(lastTime > time)
-                apply(skeleton, lastTime, cast(float)int.max, null, 0);
+                apply(skeleton, lastTime, lastTime, null, 0);
             return;
         } else if(lastTime > time) {
             lastTime = -1;
