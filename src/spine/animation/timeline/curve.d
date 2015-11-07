@@ -12,6 +12,7 @@ export abstract class CurveTimeline : Timeline {
 
     this(int frameCount) {
         _curves = new float[(frameCount - 1) * 6];
+		_curves[] = 0f;
     }
 
     @property int frameCount() {
