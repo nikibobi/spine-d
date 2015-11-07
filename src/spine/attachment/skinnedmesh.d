@@ -292,7 +292,7 @@ export class SkinnedMeshAttachment : Attachment {
                     Bone bone = skeletonBones[bones[v]];
                     float vx = weights[b] + ffd[f], vy = weights[b + 1] + ffd[f + 1], weight = weights[b + 2];
                     wx += (vx * bone.m00 + vy * bone.m01 + bone.worldX) * weight;
-                    wy += (vx * bone.m10 + wy * bone.m11 + bone.worldY) * weight;
+                    wy += (vx * bone.m10 + vy * bone.m11 + bone.worldY) * weight;
                 }
                 worldVertices[w] = wx + x;
                 worldVertices[w + 1] = wy + y;
