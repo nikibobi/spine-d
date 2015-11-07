@@ -66,7 +66,8 @@ export class FFDTimeline : CurveTimeline {
         int vertexCount = vertices[0].length;
         float[] vertices = slot.attachmentVertices;
         if(vertices.length < vertexCount) {
-            vertices.length = vertexCount;
+            vertices = new float[vertexCount];
+			vertices[] = 0f;
             slot.attachmentVertices = vertices;
         }
         if(vertices.length != vertexCount)
@@ -81,7 +82,7 @@ export class FFDTimeline : CurveTimeline {
                     vertices[i] = vertex + (lastVertices[i] - vertex) * alpha;
                 }
             } else {
-                vertices[] = lastVertices[0..vertexCount];
+                vertices = lastVertices[0..vertexCount];
             }
             return;
         }

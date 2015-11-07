@@ -267,8 +267,8 @@ export class SkeletonJson {
             mesh.path = path;
             float[] uvs = getFloatArray(map, "uvs", 1);
             float[] vertices = getFloatArray(map, "vertices", 1);
-            float[] weights = new float[uvs.length * 3 * 3];
-            int[] bones = new int[uvs.length * 3];
+            float[] weights;
+            int[] bones;
             for(int i = 0, n = vertices.length; i < n; ) {
                 int boneCount = vertices[i++].to!int;
                 bones ~= boneCount;
@@ -514,13 +514,16 @@ export class SkeletonJson {
                         foreach(valueMap; values.array) {
                             float[] vertices;
                             if("vertices" !in valueMap) {
-                                if(cast(MeshAttachment)attachment)
+                                if(cast(MeshAttachment)attachment) {
                                     vertices = (cast(MeshAttachment)attachment).vertices;
-                                else
+                                } else {
                                     vertices = new float[vertexCount];
+									vertices[] = 0;
+								}
                             } else {
                                 auto verticesValue = valueMap["vertices"].array;
                                 vertices = new float[vertexCount];
+								vertices[] = 0;
                                 int start = getInt(valueMap, "offset", 0);
                                 if(scale == 1) {
                                     for(int i = 0; i < verticesValue.length; i++)
