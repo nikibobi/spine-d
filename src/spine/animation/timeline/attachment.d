@@ -22,7 +22,7 @@ export class AttachmentTimeline : Timeline {
     }
 
     @property {
-        float[] frames() {
+        ref float[] frames() {
             return _frames;
         }
         private void frames(float[] value) {
@@ -31,7 +31,7 @@ export class AttachmentTimeline : Timeline {
     }
 
     @property {
-        string[] attachmentNames() {
+        ref string[] attachmentNames() {
             return _attachmentNames;
         }
         private void attachmentNames(string[] value) {

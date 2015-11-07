@@ -14,7 +14,7 @@ export class DrawOrderTimeline : Timeline {
     }
 
     @property {
-        float[] frames() {
+        ref float[] frames() {
             return _frames;
         }
         void frames(float[] value) {
@@ -23,7 +23,7 @@ export class DrawOrderTimeline : Timeline {
     }
 
     @property {
-        int[][] drawOrders() {
+        ref int[][] drawOrders() {
             return _drawOrders;
         }
         void drawOrders(int[][] value) {

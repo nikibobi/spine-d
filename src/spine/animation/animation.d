@@ -25,7 +25,7 @@ export class Animation {
     }
 
     @property {
-        Timeline[] timelines() {
+        ref Timeline[] timelines() {
             return _timelines;
         }
         void timelines(Timeline[] value) {

@@ -26,7 +26,7 @@ export class ColorTimeline : CurveTimeline {
     }
 
     @property {
-        float[] frames() {
+        ref float[] frames() {
             return _frames;
         }
         private void frames(float[] value) {
