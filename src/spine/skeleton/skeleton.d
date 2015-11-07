@@ -188,8 +188,10 @@ export class Skeleton {
 
     //TODO: change with ik rotation and constraints
     void updateWorldTransform() {
-        foreach(bone; bones)
+        foreach(bone; bones) {
+            bone.rotationIK = bone.rotation;
             bone.updateWorldTransform();
+        }
     }
 
     void setToSetupPose() {
