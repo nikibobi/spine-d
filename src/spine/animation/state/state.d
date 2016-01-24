@@ -93,7 +93,10 @@ export class AnimationState {
                 float previousTime = previous.time;
                 if(!previous.loop && previousTime > previous.endTime)
                     previousTime = previous.endTime;
-                previous.animation.apply(skeleton, previousTime, previousTime, previous.loop, null);
+                previous.animation.apply(skeleton, previous.lastTime, previousTime, previous.loop, null);
+				// Remove the line above, and uncomment the line below, to allow previous animations to fire events during mixing.
+				//previous.animation.apply(skeleton, previous.lastTime, previousTime, previous.loop, _events);
+				previous.lastTime = previousTime;
 
                 float alpha = current.mixTime / current.mixDuration * current.mix;
                 if(alpha >= 1) {
@@ -138,8 +141,9 @@ export class AnimationState {
     private TrackEntry expandToIndex(int index) {
         if(index < _tracks.length)
             return _tracks[index];
+        //alternative: _tracks.length = index
         while (index >= _tracks.length)
-            _tracks = null ~ _tracks;
+            _tracks ~= null;
         return null;
     }
 
@@ -231,6 +235,7 @@ export class AnimationState {
     }
 
     override string toString() {
+        //TODO: finish this method
         return "<temp>";
     }
 
