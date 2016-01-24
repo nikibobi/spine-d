@@ -88,6 +88,7 @@ export class Slot {
             return _attachment;
         }
         void attachment(Attachment value) {
+            if(_attachment == value) return;
             _attachment = value;
             _attachmentTime = skeleton.time;
             _attachmentVerticesCount = 0;
@@ -126,7 +127,12 @@ export class Slot {
         g = data.g;
         b = data.b;
         a = data.a;
-        attachment = data.attachmentName is null ? null : skeleton.getAttachment(slotIndex, data.attachmentName);
+        if (data.attachmentName is null)
+            attachment = null;
+        else {
+            _attachment = null;
+            attachment = bone.skeleton.getAttachment(slotIndex, data.attachmentName);
+        }
     }
 
     void setToSetupPose() {
