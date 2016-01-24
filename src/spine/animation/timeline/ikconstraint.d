@@ -40,7 +40,7 @@ export class IkConstraintTimeline : CurveTimeline {
         frameIndex *= 3;
         frames[frameIndex] = time;
         frames[frameIndex + 1] = mix;
-        frames[frameIndex + 1] = bendDirection;
+        frames[frameIndex + 2] = bendDirection;
     }
 
     override void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
