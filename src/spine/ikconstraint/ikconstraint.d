@@ -16,9 +16,9 @@ export class IkConstraint {
         this.mix = data.mix;
         this.bendDirection = data.bendDirection;
 
-        bones.length = data.bones.length;
-        foreach(boneData; data.bones)
-            bones ~= skeleton.findBone(boneData.name);
+        bones = new Bone[data.bones.length];
+        foreach(i, boneData; data.bones)
+            bones[i] = skeleton.findBone(boneData.name);
         target = skeleton.findBone(data.target.name);
     }
 
@@ -119,7 +119,7 @@ export class IkConstraint {
         float childX = positionX * parent.worldScaleX, childY = positionY * parent.worldScaleY;
         float offset = atan2(childY, childX);
         float len1 = sqrt(childX * childX + childY * childY), len2 = child.data.length * child.worldScaleX;
-
+        // Based on code by Ryan Juckett with permission: Copyright (c) 2008-2009 Ryan Juckett, http://www.ryanjuckett.com/
         float cosDenom = 2 * len1 * len2;
         if(cosDenom < 0.0001f) {
             child.rotationIK = childRotation + (atan2(targetY, targetX) * radDeg - parentRotation - childRotation) * alpha;
@@ -134,6 +134,12 @@ export class IkConstraint {
         float adjacent = len1 + len2 * cos, opposite = len2 * sin(childAngle);
         float parentAngle = atan2(targetY * adjacent - targetX * opposite, targetX * adjacent + targetY * opposite);
         float rotation = (parentAngle - offset) * radDeg - parentRotation;
+        if(rotation > 180)
+            rotation -= 360;
+        else if(rotation < -180)
+            rotation += 360;
+        parent.rotationIK = parentRotation + rotation * alpha;
+        rotation = (childAngle + offset) * radDeg - childRotation;
         if(rotation > 180)
             rotation -= 360;
         else if(rotation < -180)

@@ -41,6 +41,7 @@ export class Skeleton {
         g = 1f;
         b = 1f;
         a = 1f;
+        updateWorldTransform();
     }
 
     @property {
@@ -191,6 +192,9 @@ export class Skeleton {
         foreach(bone; bones) {
             bone.rotationIK = bone.rotation;
             bone.updateWorldTransform();
+        }
+        foreach(ikConstraint; ikConstraints) {
+            ikConstraint.apply();
         }
     }
 
