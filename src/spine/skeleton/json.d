@@ -309,7 +309,7 @@ export class SkeletonJson {
             box.vertices = getFloatArray(map, "vertices", scale);
             return box;
         }   
-        return null;
+        assert(0);
     }
 
     private float[] getFloatArray(JSONValue map, string name, float scale) {
