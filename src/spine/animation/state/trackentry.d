@@ -86,7 +86,7 @@ class TrackEntry {
     }
 
     override string toString() {
-        return animation is null ? "<none>" : animation.name;
+        return animation is null ? "<none>" : animation.toString();
     }
 
 package:

@@ -1,5 +1,6 @@
 module spine.animation.state.state;
 
+import std.array;
 import std.range;
 import std.signals;
 
@@ -231,8 +232,19 @@ export class AnimationState {
     }
 
     override string toString() {
-        //TODO: finish this method
-        return "<temp>";
+        auto buffer = appender!string();
+        for(int i = 0; i < _tracks.length; i++)
+        {
+            TrackEntry entry = _tracks[i];
+            if(entry is null)
+                continue;
+            if(buffer.data.length > 0)
+                buffer ~= ", ";
+            buffer ~= entry.toString();
+        }
+        if(buffer.data.length == 0)
+            return "<none>";
+        return buffer.data;
     }
 
 private:
