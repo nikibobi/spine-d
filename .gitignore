@@ -5,3 +5,7 @@
 #Bin files
 *.exe
 *.obj
+
+#DUB files
+.dub/
+dub.selections.json
