@@ -8,7 +8,7 @@ class TrackEntry {
         Animation animation() {
             return _animation;
         }
-        private void animation(Animation value) {
+        package void animation(Animation value) {
             _animation = value;
         }
     }
