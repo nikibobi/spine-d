@@ -10,7 +10,6 @@ import spine.event.event;
 import spine.skeleton.skeleton;
 import spine.util.argnull;
 
-//TODO: needs events implementation
 export class AnimationState {
 
     this(AnimationStateData data) {
@@ -60,8 +59,7 @@ export class AnimationState {
             // Check if completed the animation or a loop iteration.
             if(current.loop ? (current.lastTime % endTime > time % endTime) : (current.lastTime < endTime && time >= endTime)) {
                 int count = cast(int)(time / endTime);
-                //TODO: implement complete event
-                /*current.onComplete(this, i, count);*/
+                current.complete.emit(this, i, count);
                 complete.emit(this, i, count);
             }
 
@@ -114,8 +112,7 @@ export class AnimationState {
 
             for(int ii = 0; ii < _events.length; ii++) {
                 Event e = _events[ii];
-                //TODO: implement events
-                /*current.onEvent(this, i, e);*/
+                current.event.emit(this, i, e);
                 event.emit(this, i, e);
             }
 
@@ -136,8 +133,7 @@ export class AnimationState {
         if(current is null)
             return;
 
-        //TODO: implement events
-        /*current.onEnd(this, trackIndex);*/
+        current.end.emit(this, trackIndex);
         end.emit(this, trackIndex);
         _tracks[trackIndex] = null;
     }
@@ -157,8 +153,7 @@ export class AnimationState {
             TrackEntry previous = current.previous;
             current.previous = null;
 
-            //TODO: implement delegates
-            /*current.onEnd(this, index);*/
+            current.end.emit(this, index);
             end.emit(this, index);
             entry.mixDuration = data.getMix(current.animation, entry.animation);
             if(entry.mixDuration > 0) {
@@ -173,8 +168,7 @@ export class AnimationState {
 
         _tracks[index] = entry;
 
-        //TODO: events!
-        /*entry.onStart(this, index);*/
+        entry.start.emit(this, index);
         start.emit(this, index);
     }
 

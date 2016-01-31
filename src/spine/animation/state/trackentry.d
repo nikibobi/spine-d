@@ -1,8 +1,17 @@
 module spine.animation.state.trackentry;
 
+import std.signals;
+
 import spine.animation.animation;
+import spine.animation.state.state;
+import spine.event.event;
 
 class TrackEntry {
+
+    mixin Signal!(AnimationState, int) start;
+    mixin Signal!(AnimationState, int) end;
+    mixin Signal!(AnimationState, int, Event) event;
+    mixin Signal!(AnimationState, int, int) complete;
 
     @property {
         Animation animation() {
