@@ -1,0 +1,11 @@
+{
+	"name": "spine-d",
+	"description": "Spine runtime for D",
+	"homepage": "https://github.com/nikibobi/spine-d",
+	"authors": ["Borislav Kosharov"],
+	"copyright": "Copyright © 2016 Borislav Kosharov",
+	"license": "MIT",
+	"targetType": "library",
+	"targetName": "spine-d",
+	"targetPath": "lib"
+}
