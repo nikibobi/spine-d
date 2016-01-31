@@ -1,6 +1,7 @@
 module spine.animation.state.state;
 
 import std.range;
+import std.signals;
 
 import spine.animation.animation;
 import spine.animation.state.data;
@@ -15,6 +16,11 @@ export class AnimationState {
         mixin(ArgNull!data);
         this.data = data;
     }
+
+    mixin Signal!(AnimationState, int) start;
+    mixin Signal!(AnimationState, int) end;
+    mixin Signal!(AnimationState, int, Event) event;
+    mixin Signal!(AnimationState, int, int) complete;
 
     @property {
         AnimationStateData data() {
@@ -54,9 +60,8 @@ export class AnimationState {
             if(current.loop ? (current.lastTime % endTime > time % endTime) : (current.lastTime < endTime && time >= endTime)) {
                 int count = cast(int)(time / endTime);
                 //TODO: implement complete event
-                /*current.onComplete(this, i, count);
-                if(complete !is null)
-                    complete(this, i, count);*/
+                /*current.onComplete(this, i, count);*/
+                complete.emit(this, i, count);
             }
 
             TrackEntry next = current.next;
@@ -109,9 +114,8 @@ export class AnimationState {
             for(int ii = 0; ii < _events.length; ii++) {
                 Event e = _events[ii];
                 //TODO: implement events
-                /*current.onEvent(this, i, e);
-                if(event !is null)
-                    event(this, i, e);*/
+                /*current.onEvent(this, i, e);*/
+                event.emit(this, i, e);
             }
 
             current.lastTime = current.time;
@@ -132,9 +136,8 @@ export class AnimationState {
             return;
 
         //TODO: implement events
-        /*current.onEnd(this, trackIndex);
-        if(end !is null)
-            end(this, trackIndex);*/
+        /*current.onEnd(this, trackIndex);*/
+        end.emit(this, trackIndex);
         _tracks[trackIndex] = null;
     }
 
@@ -154,9 +157,8 @@ export class AnimationState {
             current.previous = null;
 
             //TODO: implement delegates
-            /*current.onEnd(this, index);
-            if(end !is null)
-                end(this, index);*/
+            /*current.onEnd(this, index);*/
+            end.emit(this, index);
             entry.mixDuration = data.getMix(current.animation, entry.animation);
             if(entry.mixDuration > 0) {
                 entry.mixTime = 0;
@@ -171,9 +173,8 @@ export class AnimationState {
         _tracks[index] = entry;
 
         //TODO: events!
-        /*entry.onStart(this, index);
-        if(start !is null)
-            start(this, index);*/
+        /*entry.onStart(this, index);*/
+        start.emit(this, index);
     }
 
     TrackEntry setAnimation(int trackIndex, string animationName, bool loop) {
