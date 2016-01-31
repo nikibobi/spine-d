@@ -118,6 +118,34 @@ export class SkeletonData {
         }
     }
 
+    T find(T)(string name)
+    {
+        static if(is(T == BoneData))
+        {
+            return findBone(name);
+        }
+        static if(is(T == SlotData))
+        {
+            return findSlot(name);
+        }
+        static if(is(T == Skin))
+        {
+            return findSkin(name);
+        }
+        static if(is(T == EventData))
+        {
+            return findEvent(name);
+        }
+        static if(is(T == Animation))
+        {
+            return findAnimation(name);
+        }
+        static if(is(T == IkConstraintData))
+        {
+            return findIkConstraint(name);
+        }
+    }
+
     BoneData findBone(string boneName) {
         mixin(ArgNull!boneName);
         foreach(bone; bones)
