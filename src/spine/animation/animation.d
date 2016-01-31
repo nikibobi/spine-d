@@ -90,6 +90,10 @@ export class Animation {
         return cast(hash_t)_duration; //TODO: use better hash
     }
 
+    override string toString() {
+        return name;
+    }
+
 private:
     string _name;
     Timeline[] _timelines;
