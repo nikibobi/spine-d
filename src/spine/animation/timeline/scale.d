@@ -18,8 +18,8 @@ export class ScaleTimeline : TranslateTimeline {
 
         Bone bone = skeleton.bones[boneIndex];
         if(time >= frames[$ - 3]) {
-            bone.scaleX = bone.scaleX + (bone.data.scaleX - 1 + frames[$ - 2] - bone.scaleX) * alpha;
-            bone.scaleY = bone.scaleY + (bone.data.scaleY - 1 + frames[$ - 1] - bone.scaleY) * alpha;
+            bone.scaleX = bone.scaleX + (bone.data.scaleX * frames[$ - 2] - bone.scaleX) * alpha;
+            bone.scaleY = bone.scaleY + (bone.data.scaleY * frames[$ - 1] - bone.scaleY) * alpha;
             return;
         }
 
@@ -30,7 +30,7 @@ export class ScaleTimeline : TranslateTimeline {
         float percent = 1 - (time - frameTime) / (frames[frameIndex + LAST_FRAME_TIME] - frameTime);
         percent = getCurvePercent(frameIndex / 3 - 1, percent < 0 ? 0 : (percent > 1 ? 1 : percent));
 
-        bone.scaleX = bone.scaleX + (bone.data.scaleX - 1 + lastFrameX + (frames[frameIndex + FRAME_X] - lastFrameX) * percent - bone.scaleX) * alpha;
-        bone.scaleY = bone.scaleY + (bone.data.scaleY - 1 + lastFrameY + (frames[frameIndex + FRAME_Y] - lastFrameY) * percent - bone.scaleY) * alpha;
+        bone.scaleX = bone.scaleX + (bone.data.scaleX * (lastFrameX + (frames[frameIndex + FRAME_X] - lastFrameX) * percent) - bone.scaleX) * alpha;
+        bone.scaleY = bone.scaleY + (bone.data.scaleY * (lastFrameY + (frames[frameIndex + FRAME_Y] - lastFrameY) * percent) - bone.scaleY) * alpha;
     }
 }
