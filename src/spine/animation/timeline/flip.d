@@ -32,7 +32,7 @@ export abstract class FlipTimeline : Timeline {
 
     @property {
         int frameCount() {
-            return _frames.length >> 1;
+            return frames.length >> 1;
         }
     }
 
@@ -45,7 +45,7 @@ export abstract class FlipTimeline : Timeline {
     void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
         if(time < frames[0]) {
             if(lastTime > time)
-                apply(skeleton, lastTime, lastTime, null, 0);
+                apply(skeleton, lastTime, float.max, null, 0);
             return;
         } else if(lastTime > time) {
             lastTime = -1;
