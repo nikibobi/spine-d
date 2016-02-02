@@ -19,7 +19,16 @@ export class AtlasAttachmentLoader : AttachmentLoader {
 
     this(Atlas[] atlases ...) {
         mixin(ArgNull!atlases);
-        _atlases = atlases;
+        this.atlases = atlases;
+    }
+
+    private @property {
+        Atlas[] atlases() {
+            return _atlases;
+        }
+        void atlases(Atlas[] value) {
+            _atlases = value;
+        }
     }
 
     RegionAttachment newRegionAttachment(Skin skin, string name, string path) {
@@ -90,8 +99,8 @@ export class AtlasAttachmentLoader : AttachmentLoader {
 
     AtlasRegion findRegion(string name) {
         AtlasRegion region;
-        for(int i = 0; i < _atlases.length; i++) {
-            region = _atlases[i].findRegion(name);
+        for(int i = 0; i < atlases.length; i++) {
+            region = atlases[i].findRegion(name);
             if(region !is null)
                 return region;
         }
