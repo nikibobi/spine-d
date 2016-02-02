@@ -8,6 +8,8 @@ export class IkConstraintData {
     this(string name) {
         mixin(ArgNull!name);
         this.name = name;
+        this.bendDirection = 1;
+        this.mix = 1f;
     }
 
     @property {
@@ -63,6 +65,6 @@ private:
     string _name;
     BoneData[] _bones;
     BoneData _target;
-    int _bendDirection = 1;
-    float _mix = 1;
+    int _bendDirection;
+    float _mix;
 }
