@@ -104,21 +104,21 @@ export class RegionAttachment : Attachment {
         offset[Y4] = localYCos + localX2Sin;
     }
 
-    void computeWorldVertices(Bone bone, float[] vertices) {
+    void computeWorldVertices(Bone bone, float[] worldVertices) {
         float x = bone.skeleton.x + bone.worldX;
         float y = bone.skeleton.y + bone.worldY;
         float m00 = bone.m00;
         float m01 = bone.m01;
         float m10 = bone.m10;
         float m11 = bone.m11;
-        vertices[X1] = offset[X1] * m00 + offset[Y1] * m01 + x;
-        vertices[Y1] = offset[X1] * m10 + offset[Y1] * m11 + y;
-        vertices[X2] = offset[X2] * m00 + offset[Y2] * m01 + x;
-        vertices[Y2] = offset[X2] * m10 + offset[Y2] * m11 + y;
-        vertices[X3] = offset[X3] * m00 + offset[Y3] * m01 + x;
-        vertices[Y3] = offset[X3] * m10 + offset[Y3] * m11 + y;
-        vertices[X4] = offset[X4] * m00 + offset[Y4] * m01 + x;
-        vertices[Y4] = offset[X4] * m10 + offset[Y4] * m11 + y;
+        worldVertices[X1] = offset[X1] * m00 + offset[Y1] * m01 + x;
+        worldVertices[Y1] = offset[X1] * m10 + offset[Y1] * m11 + y;
+        worldVertices[X2] = offset[X2] * m00 + offset[Y2] * m01 + x;
+        worldVertices[Y2] = offset[X2] * m10 + offset[Y2] * m11 + y;
+        worldVertices[X3] = offset[X3] * m00 + offset[Y3] * m01 + x;
+        worldVertices[Y3] = offset[X3] * m10 + offset[Y3] * m11 + y;
+        worldVertices[X4] = offset[X4] * m00 + offset[Y4] * m01 + x;
+        worldVertices[Y4] = offset[X4] * m10 + offset[Y4] * m11 + y;
 
     }
 
