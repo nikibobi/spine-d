@@ -16,6 +16,7 @@ export class AnimationState {
     this(AnimationStateData data) {
         mixin(ArgNull!data);
         this.data = data;
+        this.timeScale = 1f;
     }
 
     mixin Signal!(AnimationState, int) start;
@@ -251,5 +252,5 @@ private:
     AnimationStateData _data;
     TrackEntry[] _tracks;
     Event[] _events;
-    float _timeScale = 1;
+    float _timeScale;
 }

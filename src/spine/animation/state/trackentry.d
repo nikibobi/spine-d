@@ -8,6 +8,12 @@ import spine.event.event;
 
 class TrackEntry {
 
+    this() {
+        lastTime = -1;
+        timeScale = 1;
+        mix = 1;
+    }
+
     mixin Signal!(AnimationState, int) start;
     mixin Signal!(AnimationState, int) end;
     mixin Signal!(AnimationState, int, Event) event;
@@ -93,6 +99,6 @@ package:
     TrackEntry next, previous;
     Animation _animation;
     bool _loop;
-    float _delay, _time, _lastTime = -1, _endTime, _timeScale = 1;
-    float mixTime, mixDuration, _mix = 1;
+    float _delay, _time, _lastTime, _endTime, _timeScale;
+    float mixTime, mixDuration, _mix;
 }
