@@ -59,7 +59,7 @@ export class AttachmentTimeline : Timeline {
             lastTime = -1;
         }
 
-        int frameIndex = (time >= frames[$ - 1] ? frames.length - 1 : Animation.binarySearch(frames, time) - 1);
+        int frameIndex = (time >= frames[$ - 1] ? frames.length : Animation.binarySearch(frames, time)) - 1;
         if(frames[frameIndex] < lastTime)
             return;
 
