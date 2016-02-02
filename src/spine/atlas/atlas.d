@@ -23,20 +23,47 @@ export class Atlas {
     }
 
     this(AtlasPage[] pages, AtlasRegion[] regions) {
-        _pages = pages;
-        _regions = regions;
-        _textureLoader = null;
+        this.pages = pages;
+        this.regions = regions;
+        this.textureLoader = null;
+    }
+
+    private @property {
+        ref AtlasPage[] pages() {
+            return _pages;
+        }
+        void pages(AtlasPage[] value) {
+            _pages = value;
+        }
+    }
+
+    private @property {
+        ref AtlasRegion[] regions() {
+            return _regions;
+        }
+        void regions(AtlasRegion[] value) {
+            _regions = value;
+        }
+    }
+
+    private @property {
+        TextureLoader textureLoader() {
+            return _textureLoader;
+        }
+        void textureLoader(TextureLoader value) {
+            _textureLoader = value;
+        }
     }
 
     //TODO: add unittest
     
     private void load(File reader, string imagesDir, TextureLoader textureLoader) {
         mixin(ArgNull!textureLoader);
-        _textureLoader = textureLoader;
+        this.textureLoader = textureLoader;
         
         auto tuple = new string[4];
         AtlasPage page;
-        while (true) {
+        while(true) {
             auto line = reader.readln();
             if (line == "")
                 break;
@@ -68,9 +95,9 @@ export class Atlas {
                 else if (direction == "xy")
                     page.uWrap = page.vWrap = TextureWrap.Repeat;
                 
-                _textureLoader.load(page, buildPath(imagesDir, line.strip()));
+                textureLoader.load(page, buildPath(imagesDir, line.strip()));
                 
-                _pages ~= page;
+                pages ~= page;
                 
             } else {
                 auto region = new AtlasRegion;
@@ -96,11 +123,11 @@ export class Atlas {
                 region.width = abs(width);
                 region.height = abs(height);
                 
-                if (readTuple(reader, tuple) == 4) { // split is optional
+                if(readTuple(reader, tuple) == 4) { // split is optional
                     foreach(i; 0..4)
                         region.splits[i] = tuple[i].to!int;
 
-                    if (readTuple(reader, tuple) == 4) { // pad is optional, but only present with splits
+                    if(readTuple(reader, tuple) == 4) { // pad is optional, but only present with splits
                         foreach(i; 0..4)
                             region.pads[i] = tuple[i].to!int;
                         readTuple(reader, tuple);
@@ -116,7 +143,7 @@ export class Atlas {
                 
                 region.index = readValue(reader).to!int;
                 
-                _regions ~= region;
+                regions ~= region;
             }
         }
     }
@@ -133,7 +160,7 @@ export class Atlas {
         auto colon = line.indexOf(':');
         assert(colon != -1); //Invalid Line
         int i = 0, lastMatch = colon + 1;
-        for (; i < 3; i++) {
+        for(; i < 3; i++) {
             auto comma = line.indexOf(',', lastMatch);
             if (comma == -1)
                 break;
@@ -145,24 +172,24 @@ export class Atlas {
     }
 
     void flipV() {
-        foreach(region; _regions) {
+        foreach(region; regions) {
             region.v = 1 - region.v;
             region.v2 = 1 - region.v2;
         }
     }
     
     AtlasRegion findRegion(string name) {
-        foreach(region; _regions)
+        foreach(region; regions)
             if(region.name == name)
                 return region;
         return null;
     }
     
     void dispose() {
-        if(_textureLoader is null)
+        if(textureLoader is null)
             return;
-        foreach(page; _pages)
-            _textureLoader.unload(page.rendererObject);
+        foreach(page; pages)
+            textureLoader.unload(page.rendererObject);
     }
     
 private:
