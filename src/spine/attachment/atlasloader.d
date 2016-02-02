@@ -35,7 +35,7 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         AtlasRegion region = findRegion(path);
         if(region is null)
             throw new Exception("Region not found in atlas: " ~ path ~ "(region attachment: " ~ name ~ ")");
-        RegionAttachment attachment = new RegionAttachment(name);
+        auto attachment = new RegionAttachment(name);
         with(attachment) {
             rendererObject = region;
             setUVs(region.u, region.v, region.u2, region.v2, region.rotate);
@@ -53,7 +53,7 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         AtlasRegion region = findRegion(path);
         if(region is null)
             throw new Exception("Region not found in atlas: " ~ path ~ " (mesh attachment: " ~ name ~ ")");
-        MeshAttachment attachment = new MeshAttachment(name);
+        auto attachment = new MeshAttachment(name);
         with(attachment) {
             rendererObject = region;
             regionU = region.u;
@@ -75,7 +75,7 @@ export class AtlasAttachmentLoader : AttachmentLoader {
         AtlasRegion region = findRegion(path);
         if(region is null)
             throw new Exception("Region not found in atlas: " ~ path ~ " (skinned mesh attachment: " ~ name ~ ")");
-        SkinnedMeshAttachment attachment = new SkinnedMeshAttachment(name);
+        auto attachment = new SkinnedMeshAttachment(name);
         with(attachment) {
             rendererObject = region;
             regionU = region.u;
