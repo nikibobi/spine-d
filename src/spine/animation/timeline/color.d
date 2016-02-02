@@ -47,29 +47,28 @@ export class ColorTimeline : CurveTimeline {
         if(time < frames[0])
             return;
 
-        Slot slot = skeleton.slots[slotIndex];
-
+        float r, g, b, a;
         if(time >= frames[$ - 5]) {
-            slot.r = frames[$ - 4];
-            slot.g = frames[$ - 3];
-            slot.b = frames[$ - 2];
-            slot.a = frames[$ - 1];
-            return;
+            r = frames[$ - 4];
+            g = frames[$ - 3];
+            b = frames[$ - 2];
+            a = frames[$ - 1];
+        } else {
+            int frameIndex = Animation.binarySearch(frames, time, 5);
+            float lastFrameR = frames[frameIndex - 4];
+            float lastFrameG = frames[frameIndex - 3];
+            float lastFrameB = frames[frameIndex - 2];
+            float lastFrameA = frames[frameIndex - 1];
+            float frameTime = frames[frameIndex];
+            float percent = 1 - (time - frameTime) / (frames[frameIndex + LAST_FRAME_TIME] - frameTime);
+            percent = getCurvePercent(frameIndex / 5 - 1, percent < 0 ? 0 : (percent > 1 ? 1 : percent));
+
+            r = lastFrameR + (frames[frameIndex + FRAME_R] - lastFrameR) * percent;
+            g = lastFrameG + (frames[frameIndex + FRAME_G] - lastFrameG) * percent;
+            b = lastFrameB + (frames[frameIndex + FRAME_B] - lastFrameB) * percent;
+            a = lastFrameA + (frames[frameIndex + FRAME_A] - lastFrameA) * percent;
         }
-
-        int frameIndex = Animation.binarySearch(frames, time, 5);
-        float lastFrameR = frames[frameIndex - 4];
-        float lastFrameG = frames[frameIndex - 3];
-        float lastFrameB = frames[frameIndex - 2];
-        float lastFrameA = frames[frameIndex - 1];
-        float frameTime = frames[frameIndex];
-        float percent = 1 - (time - frameTime) / (frames[frameIndex + LAST_FRAME_TIME] - frameTime);
-        percent = getCurvePercent(frameIndex / 5 - 1, percent < 0 ? 0 : (percent > 1 ? 1 : percent));
-
-        float r = lastFrameR + (frames[frameIndex + FRAME_R] - lastFrameR) * percent;
-        float g = lastFrameG + (frames[frameIndex + FRAME_G] - lastFrameG) * percent;
-        float b = lastFrameB + (frames[frameIndex + FRAME_B] - lastFrameB) * percent;
-        float a = lastFrameA + (frames[frameIndex + FRAME_A] - lastFrameA) * percent;
+        Slot slot = skeleton.slots[slotIndex];
         if (alpha < 1) {
             slot.r = slot.r + (r - slot.r) * alpha;
             slot.g = slot.g + (g - slot.g) * alpha;
