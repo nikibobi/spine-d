@@ -23,27 +23,36 @@ export class Skin {
         }
     }
 
+    private @property {
+        ref Attachment[Key] attachments() {
+            return _attachments;
+        }
+        void attachments(Attachment[Key] value) {
+            _attachments = value;
+        }
+    }
+
     void addAttachment(int slotIndex, string name, Attachment attachment) {
         mixin(ArgNull!attachment);
-        _attachments[Key(slotIndex, name)] = attachment;
+        attachments[Key(slotIndex, name)] = attachment;
     }
 
     Attachment getAttachment(int slotIndex, string name) {
-        if(Key(slotIndex, name) in _attachments)
-            return _attachments[Key(slotIndex, name)];
+        if(Key(slotIndex, name) in attachments)
+            return attachments[Key(slotIndex, name)];
         return null;
     }
 
     void findNamesForSlot(int slotIndex, string[] names) {
         mixin(ArgNull!names);
-        foreach(key; _attachments.keys)
+        foreach(key; attachments.keys)
             if(key.slotIndex == slotIndex)
                 names ~= key.name;
     }
 
     void findAttachmentsForSlot(int slotIndex, Attachment[] attachments) {
         mixin(ArgNull!attachments);
-        foreach(key, value; _attachments)
+        foreach(key, value; this.attachments)
             if(key.slotIndex == slotIndex)
                 attachments ~= value;
     }
@@ -53,7 +62,7 @@ export class Skin {
     }
 
     void attachAll(Skeleton skeleton, Skin oldSkin) {
-        foreach(key, value; oldSkin._attachments) {
+        foreach(key, value; oldSkin.attachments) {
             Slot slot = skeleton.slots[key.slotIndex];
             if(slot.attachment == value) {
                 Attachment attachment = getAttachment(key.slotIndex, key.name);
