@@ -28,6 +28,15 @@ export class AnimationStateData {
         }
     }
 
+    private @property {
+        float[Key] animationToMixTime() {
+            return _animationToMixTime;
+        }
+        void animationToMixTime(float[Key] value) {
+            _animationToMixTime = value;
+        }
+    }
+
     void setMix(string fromName, string toName, float duration) {
         Animation from = skeletonData.findAnimation(fromName);
         if(from is null)
@@ -41,11 +50,11 @@ export class AnimationStateData {
     void setMix(Animation from, Animation to, float duration) {
         mixin(ArgNull!from);
         mixin(ArgNull!to);
-        _animationToMixTime[Key(from, to)] = duration;
+        animationToMixTime[Key(from, to)] = duration;
     }
 
     float getMix(Animation from, Animation to) {
-        return _animationToMixTime.get(Key(from, to), defaultMix);
+        return animationToMixTime.get(Key(from, to), defaultMix);
     }
 
 private:
