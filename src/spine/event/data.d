@@ -6,12 +6,15 @@ export class EventData {
 
 	this(string name) {
 		mixin(ArgNull!name);
-		_name = name;
+		this.name = name;
 	}
 
 	@property {
 	    string name() {
 	        return _name;
+	    }
+	    private void name(string value) {
+	        _name = value;
 	    }
 	}
 
