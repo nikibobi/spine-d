@@ -240,9 +240,12 @@ extern class MeshAttachment : Attachment {
     }
 
     void updateUVs() {
-        float u = regionU, v = regionV, width = regionU2 - regionU, height = regionV2 - regionV;
+        float u = regionU;
+        float v = regionV;
+        float width = regionU2 - regionU;
+        float height = regionV2 - regionV;
         if(uvs is null || uvs.length != regionUVs.length)
-            uvs.length = regionUVs.length;
+            uvs = new float[regionUVs.length];
         if(regionRotate) {
             for(int i = 0; i < uvs.length; i += 2) {
                 uvs[i] = u + regionUVs[i + 1] * width;
@@ -258,8 +261,12 @@ extern class MeshAttachment : Attachment {
 
     void computeWorldVertices(Slot slot, float[] worldVertices) {
         Bone bone = slot.bone;
-        float x = bone.skeleton.x + bone.worldX, y = bone.skeleton.y + bone.worldY;
-        float m00 = bone.m00, m01 = bone.m01, m10 = bone.m10, m11 = bone.m11;
+        float x = bone.skeleton.x + bone.worldX;
+        float y = bone.skeleton.y + bone.worldY;
+        float m00 = bone.m00;
+        float m01 = bone.m01;
+        float m10 = bone.m10;
+        float m11 = bone.m11;
         if(slot.attachmentVerticesCount == vertices.length)
             vertices = slot.attachmentVertices;
         for(int i = 0; i < vertices.length; i += 2) {
