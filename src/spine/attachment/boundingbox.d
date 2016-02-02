@@ -10,7 +10,7 @@ export class BoundingBoxAttachment : Attachment {
     }
 
     @property {
-        float[] vertices() {
+        ref float[] vertices() {
             return _vertices;
         }
         void vertices(float[] value) {
