@@ -18,9 +18,9 @@ export class BoundingBoxAttachment : Attachment {
         }
     }
 
-    void computeWorldVertices(float x, float y, Bone bone, float[] worldVertices) {
-        x += bone.worldX;
-        y += bone.worldY;
+    void computeWorldVertices(Bone bone, float[] worldVertices) {
+        float x = bone.skeleton.x + bone.worldX;
+        float y = bone.skeleton.y + bone.worldY;
         float m00 = bone.m00;
         float m01 = bone.m01;
         float m10 = bone.m10;
