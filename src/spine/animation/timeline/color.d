@@ -29,7 +29,7 @@ export class ColorTimeline : CurveTimeline {
         ref float[] frames() {
             return _frames;
         }
-        private void frames(float[] value) {
+        void frames(float[] value) {
             _frames = value;
         }
     }

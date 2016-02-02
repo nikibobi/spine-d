@@ -25,7 +25,7 @@ export class AttachmentTimeline : Timeline {
         ref float[] frames() {
             return _frames;
         }
-        private void frames(float[] value) {
+        void frames(float[] value) {
             _frames = value;
         }
     }
@@ -34,7 +34,7 @@ export class AttachmentTimeline : Timeline {
         ref string[] attachmentNames() {
             return _attachmentNames;
         }
-        private void attachmentNames(string[] value) {
+        void attachmentNames(string[] value) {
             _attachmentNames = value;
         }
     }

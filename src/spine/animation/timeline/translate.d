@@ -30,7 +30,7 @@ export class TranslateTimeline : CurveTimeline {
         ref float[] frames() {
             return _frames;
         }
-        private void frames(float[] value) {
+        void frames(float[] value) {
             _frames = value;
         }
     }
