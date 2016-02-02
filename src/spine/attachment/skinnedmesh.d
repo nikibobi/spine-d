@@ -250,9 +250,12 @@ export class SkinnedMeshAttachment : Attachment {
     }
 
     void updateUVs() {
-        float u = regionU, v = regionV, width = regionU2 - regionU, height = regionV2 - regionV;
+        float u = regionU;
+        float v = regionV;
+        float width = regionU2 - regionU;
+        float height = regionV2 - regionV;
         if(uvs is null || uvs.length != regionUVs.length)
-            uvs.length = regionUVs.length;
+            uvs = new float[regionUVs.length];
         if(regionRotate) {
             for(int i = 0; i < uvs.length; i += 2) {
                 uvs[i] = u + regionUVs[i + 1] * width;
@@ -269,14 +272,18 @@ export class SkinnedMeshAttachment : Attachment {
     void computeWorldVertices(Slot slot, float[] worldVertices) {
         Skeleton skeleton = slot.bone.skeleton;
         Bone[] skeletonBones = skeleton.bones;
-        float x = skeleton.x, y = skeleton.y;
+        float x = skeleton.x;
+        float y = skeleton.y;
         if(slot.attachmentVerticesCount == 0) {
             for(int w = 0, v = 0, b = 0; v < bones.length; w += 2) {
-                float wx = 0, wy = 0;
+                float wx = 0;
+                float wy = 0;
                 int nn = bones[v++] + v;
                 for(; v < nn; v++, b += 3) {
                     Bone bone = skeletonBones[bones[v]];
-                    float vx = weights[b], vy = weights[b + 1], weight = weights[b + 2];
+                    float vx = weights[b];
+                    float vy = weights[b + 1];
+                    float weight = weights[b + 2];
                     wx += (vx * bone.m00 + vy * bone.m01 + bone.worldX) * weight;
                     wy += (vx * bone.m10 + vy * bone.m11 + bone.worldY) * weight;
                 }
@@ -286,11 +293,14 @@ export class SkinnedMeshAttachment : Attachment {
         } else {
             float[] ffd = slot.attachmentVertices;
             for(int w = 0, v = 0, b = 0, f = 0; v < bones.length; w += 2) {
-                float wx = 0, wy = 0;
+                float wx = 0;
+                float wy = 0;
                 int nn = bones[v++] + v;
                 for(; v < nn; v++, b += 3, f += 2) {
                     Bone bone = skeletonBones[bones[v]];
-                    float vx = weights[b] + ffd[f], vy = weights[b + 1] + ffd[f + 1], weight = weights[b + 2];
+                    float vx = weights[b] + ffd[f];
+                    float vy = weights[b + 1] + ffd[f + 1];
+                    float weight = weights[b + 2];
                     wx += (vx * bone.m00 + vy * bone.m01 + bone.worldX) * weight;
                     wy += (vx * bone.m10 + vy * bone.m11 + bone.worldY) * weight;
                 }
