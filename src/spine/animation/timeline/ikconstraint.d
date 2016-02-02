@@ -15,7 +15,7 @@ export class IkConstraintTimeline : CurveTimeline {
 
     this(int frameCount) {
         super(frameCount);
-        frames.length = frameCount * 3;
+        frames = new float[frameCount * 3];
     }
 
     @property {
