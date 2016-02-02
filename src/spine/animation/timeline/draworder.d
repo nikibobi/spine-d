@@ -9,8 +9,8 @@ import spine.slot.slot;
 export class DrawOrderTimeline : Timeline {
 
     this(int frameCount) {
-        _frames.length = frameCount;
-        _drawOrders.length = frameCount;
+        frames = new float[frameCount];
+        drawOrders = new int[][frameCount];
     }
 
     @property {
@@ -32,12 +32,12 @@ export class DrawOrderTimeline : Timeline {
     }
 
     @property int frameCount() {
-        return _frames.length;
+        return frames.length;
     }
 
     void setFrame(int frameIndex, float time, int[] drawOrder) {
-        _frames[frameIndex] = time;
-        _drawOrders[frameIndex] = drawOrder;
+        frames[frameIndex] = time;
+        drawOrders[frameIndex] = drawOrder;
     }
 
     void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
@@ -50,14 +50,13 @@ export class DrawOrderTimeline : Timeline {
         else
             frameIndex = Animation.binarySearch(frames, time) - 1;
 
-        Slot[] drawOrder = skeleton.drawOrder;
-        Slot[] slots = skeleton.slots;
         int[] drawOrderToSetupIndex = drawOrders[frameIndex];
         if(drawOrderToSetupIndex is null) {
-            drawOrder[] = slots[];
+            skeleton.drawOrder[] = skeleton.slots[];
         } else {
-            for(int i = 0; i < drawOrderToSetupIndex.length; i++)
-                drawOrder[i] = slots[drawOrderToSetupIndex[i]];
+            for(int i = 0; i < drawOrderToSetupIndex.length; i++) {
+                skeleton.drawOrder[i] = skeleton.slots[drawOrderToSetupIndex[i]];
+            }
         }
     }
 
