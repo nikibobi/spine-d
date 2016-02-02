@@ -11,8 +11,8 @@ export class FFDTimeline : CurveTimeline {
 
     this(int frameCount) {
         super(frameCount);
-        frames.length = frameCount;
-        vertices.length = frameCount;
+        frames = new float[frameCount];
+        vertices = new float[][frameCount];
     }
 
     @property {
@@ -63,7 +63,9 @@ export class FFDTimeline : CurveTimeline {
         if(time < frames[0]) // Time is before first frame.
             return;
 
-        int vertexCount = vertices[0].length;
+        float[][] frameVertices = this.vertices;
+        int vertexCount = frameVertices[0].length;
+
         float[] vertices = slot.attachmentVertices;
         if(vertices.length < vertexCount) {
             vertices = new float[vertexCount];
@@ -75,14 +77,14 @@ export class FFDTimeline : CurveTimeline {
         slot.attachmentVerticesCount = vertexCount;
 
         if(time >= frames[$ - 1]) { // Time is after last frame.
-            float[] lastVertices = this.vertices[$ - 1];
+            float[] lastVertices = frameVertices[$ - 1];
             if(alpha < 1) {
                 for(int i = 0; i < vertexCount; i++) {
                     float vertex = vertices[i];
                     vertices[i] = vertex + (lastVertices[i] - vertex) * alpha;
                 }
             } else {
-                vertices = lastVertices[0..vertexCount];
+                vertices[] = lastVertices[0..vertexCount];
             }
             return;
         }
@@ -92,8 +94,8 @@ export class FFDTimeline : CurveTimeline {
         float percent = 1 - (time - frameTime) / (frames[frameIndex - 1] - frameTime);
         percent = getCurvePercent(frameIndex - 1, percent < 0 ? 0 : (percent > 1 ? 1 : percent));
         
-        float[] prevVertices = this.vertices[frameIndex - 1];
-        float[] nextVertices = this.vertices[frameIndex];
+        float[] prevVertices = frameVertices[frameIndex - 1];
+        float[] nextVertices = frameVertices[frameIndex];
 
         if(alpha < 1) {
             for(int i = 0; i < vertexCount; i++) {
