@@ -44,6 +44,10 @@ export class Event {
 	    }
 	}
 
+	override string toString() {
+		return data.name;
+	}
+
 private:
 	EventData _data;
 	int _integer;
