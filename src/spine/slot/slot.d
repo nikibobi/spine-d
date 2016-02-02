@@ -16,10 +16,6 @@ export class Slot {
         mixin(ArgNull!bone);
         this.data = data;
         this.bone = bone;
-        r = 1f;
-        g = 1f;
-        b = 1f;
-        a = 1f;
         setToSetupPose();
     }
 
@@ -105,7 +101,7 @@ export class Slot {
     }
 
     @property {
-        float[] attachmentVertices() {
+        ref float[] attachmentVertices() {
             return _attachmentVertices;
         }
         void attachmentVertices(float[] value) {
@@ -127,9 +123,9 @@ export class Slot {
         g = data.g;
         b = data.b;
         a = data.a;
-        if (data.attachmentName is null)
+        if(data.attachmentName is null) {
             attachment = null;
-        else {
+        } else {
             _attachment = null;
             attachment = bone.skeleton.getAttachment(slotIndex, data.attachmentName);
         }
