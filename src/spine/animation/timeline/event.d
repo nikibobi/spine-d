@@ -8,8 +8,8 @@ import spine.skeleton.skeleton;
 export class EventTimeline : Timeline {
 
 	this(int frameCount) {
-		frames.length = frameCount;
-		events.length = frameCount;
+		frames = new float[frameCount];
+		events = new Event[frameCount];
 	}
 
 	@property {
@@ -45,7 +45,7 @@ export class EventTimeline : Timeline {
 		if(firedEvents is null)
 			return;
 		if(lastTime > time) {
-			apply(skeleton, lastTime, lastTime, firedEvents, alpha);
+			apply(skeleton, lastTime, float.max, firedEvents, alpha);
 			lastTime = -1f;
 		} else if(lastTime >= frames[$ - 1]) {
 			return;
@@ -58,7 +58,7 @@ export class EventTimeline : Timeline {
 		} else {
 			frameIndex = Animation.binarySearch(frames, lastTime);
 			float frame = frames[frameIndex];
-			while (frameIndex > 0) {
+			while(frameIndex > 0) {
 				if(frames[frameIndex - 1] != frame)
 					break;
 				frameIndex--;
