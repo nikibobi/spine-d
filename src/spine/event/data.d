@@ -18,31 +18,34 @@ export class EventData {
 	    }
 	}
 
-	@property {
-	    int integer() {
-	        return _integer;
-	    }
-	    void integer(int value) {
-	        _integer = value;
-	    }
+	@property T get(T)() {
+		static if(is(T == int))
+		{
+			return _integer;
+		}
+		static if(is(T == float))
+		{
+			return _number;
+		}
+		static if(is(T == string))
+		{
+			return _text;
+		}
 	}
 
-	@property {
-	    float number() {
-	        return _number;
-	    }
-	    void number(float value) {
-	        _number = value;
-	    }
-	}
-
-	@property {
-	    string text() {
-	        return _text;
-	    }
-	    void text(string value) {
-	        _text = value;
-	    }
+	@property void set(T)(T value) {
+		static if(is(T == int))
+		{
+			_integer = value;
+		}
+		static if(is(T == float))
+		{
+			_number = value;
+		}
+		static if(is(T == string))
+		{
+			_text = value;
+		}
 	}
 
 	override string toString() {

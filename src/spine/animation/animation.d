@@ -1,5 +1,7 @@
 module spine.animation.animation;
 
+import std.range.primitives;
+
 import spine.animation.timeline.timeline;
 import spine.event.event;
 import spine.skeleton.skeleton;
@@ -42,7 +44,8 @@ export class Animation {
         }
     }
 
-    void apply(Skeleton skeleton, float lastTime, float time, bool loop, Event[] events) {
+    void apply(E)(Skeleton skeleton, float lastTime, float time, bool loop, E events)
+    if(isOutputRange!(E, Event)) {
         mixin(ArgNull!skeleton);
         if(loop && duration != 0) {
             time %= duration;
@@ -52,7 +55,8 @@ export class Animation {
             timeline.apply(skeleton, lastTime, time, events, 1);
     }
 
-    void mix(Skeleton skeleton, float lastTime, float time, bool loop, Event[] events, float alpha) {
+    void mix(E)(Skeleton skeleton, float lastTime, float time, bool loop, E events, float alpha)
+    if(isOutputRange!(E, Event)) {
         mixin(ArgNull!skeleton);
         if(loop && duration != 0) {
             time %= duration;

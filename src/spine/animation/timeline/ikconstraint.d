@@ -43,7 +43,7 @@ export class IkConstraintTimeline : CurveTimeline {
         frames[frameIndex + 2] = bendDirection;
     }
 
-    override void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
+    override void apply(E)(Skeleton skeleton, float lastTime, float time, E firedEvents, float alpha) {
         if(time < frames[0])
             return; // Time is before first frame.
 

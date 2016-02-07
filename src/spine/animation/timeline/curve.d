@@ -28,7 +28,7 @@ export abstract class CurveTimeline : Timeline {
         return curves.length / BEZIER_SIZE + 1;
     }
 
-    abstract void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha);
+    abstract void apply(E)(Skeleton skeleton, float lastTime, float time, E events, float alpha);
 
     void setLinear(int frameIndex) {
         curves[frameIndex * BEZIER_SIZE] = LINEAR;

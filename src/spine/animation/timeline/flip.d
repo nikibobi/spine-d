@@ -7,7 +7,7 @@ import spine.event.event;
 import spine.skeleton.skeleton;
 
 export abstract class FlipTimeline : Timeline {
-    
+
     this(int frameCount) {
         frames = new float[frameCount << 1];
     }
@@ -42,7 +42,7 @@ export abstract class FlipTimeline : Timeline {
         frames[frameIndex + 1] = flip ? 1 : 0;
     }
 
-    void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
+    void apply(E)(Skeleton skeleton, float lastTime, float time, E firedEvents, float alpha) {
         if(time < frames[0]) {
             if(lastTime > time)
                 apply(skeleton, lastTime, float.max, null, 0);

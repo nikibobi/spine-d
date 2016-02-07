@@ -176,9 +176,9 @@ export class SkeletonJson {
                 foreach(key, entryMap; root["events"].object) {
                     auto eventData = new EventData(key);
                     with(eventData) {
-                        integer = getInt(entryMap, "int", 0);
-                        number = getFloat(entryMap, "float", 0);
-                        text = getString(entryMap, "string", null);
+                        set!int = getInt(entryMap, "int", 0);
+                        set!float = getFloat(entryMap, "float", 0);
+                        set!string = getString(entryMap, "string", null);
                     }
                     skeletonData.events ~= eventData;
                 }
@@ -598,9 +598,9 @@ export class SkeletonJson {
                 if(eventData is null)
                     throw new Exception("Event not found: " ~ eventMap["name"].text);
                 auto e = new Event(eventData);
-                e.integer = getInt(eventMap, "int", eventData.integer);
-                e.number = getFloat(eventMap, "float", eventData.number);
-                e.text = getString(eventMap, "string", eventData.text);
+                e.set!int = getInt(eventMap, "int", eventData.get!int);
+                e.set!float = getFloat(eventMap, "float", eventData.get!float);
+                e.set!string = getString(eventMap, "string", eventData.get!string);
                 timeline.setFrame(frameIndex++, eventMap["time"].number, e);
             }
             timelines ~= timeline;

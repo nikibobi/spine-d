@@ -56,7 +56,7 @@ export class FFDTimeline : CurveTimeline {
         this.vertices[frameIndex] = vertices;
     }
 
-    override void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
+    override void apply(E)(Skeleton skeleton, float lastTime, float time, E firedEvents, float alpha) {
         Slot slot = skeleton.slots[slotIndex];
         if(slot.attachment != attachment)
             return;
