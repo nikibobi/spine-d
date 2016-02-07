@@ -50,10 +50,10 @@ export class AttachmentTimeline : Timeline {
         attachmentNames[frameIndex] = attachmentName;
     }
 
-    void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
+    void apply(E)(Skeleton skeleton, float lastTime, float time, E events, float alpha) {
         if(time < frames[0]) {
             if(lastTime > time)
-                apply(skeleton, lastTime, float.max, null, 0);
+                apply(skeleton, lastTime, float.max, events, 0);
             return;
         } else if(lastTime > time) {
             lastTime = -1;

@@ -42,10 +42,10 @@ export abstract class FlipTimeline : Timeline {
         frames[frameIndex + 1] = flip ? 1 : 0;
     }
 
-    void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
+    void apply(E)(Skeleton skeleton, float lastTime, float time, E firedEvents, float alpha) {
         if(time < frames[0]) {
             if(lastTime > time)
-                apply(skeleton, lastTime, lastTime, null, 0);
+                apply(skeleton, lastTime, float.max, firedEvents, 0);
             return;
         } else if(lastTime > time) {
             lastTime = -1;

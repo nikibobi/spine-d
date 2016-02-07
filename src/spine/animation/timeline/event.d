@@ -41,9 +41,9 @@ export class EventTimeline : Timeline {
 		events[frameIndex] = e;
 	}
 
-	void apply(Skeleton skeleton, float lastTime, float time, Event[] firedEvents, float alpha) {
-		if(firedEvents is null)
-			return;
+	void apply(E)(Skeleton skeleton, float lastTime, float time, E firedEvents, float alpha) {
+		// if(firedEvents is null)
+		// 	return;
 		if(lastTime > time) {
 			apply(skeleton, lastTime, lastTime, firedEvents, alpha);
 			lastTime = -1f;
@@ -65,7 +65,7 @@ export class EventTimeline : Timeline {
 			}
 		}
 		for(; frameIndex < frameCount && time >= frames[frameIndex]; frameIndex++)
-			firedEvents ~= events[frameIndex];
+			firedEvents.put(events[frameIndex]);
 	}
 
 private:

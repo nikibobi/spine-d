@@ -19,7 +19,7 @@ export abstract class CurveTimeline : Timeline {
         return _curves.length / 6 + 1;
     }
 
-    abstract void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha);
+    abstract void apply(E)(Skeleton skeleton, float lastTime, float time, E events, float alpha);
 
     void setLinear(int frameIndex) {
         _curves[frameIndex * 6] = LINEAR;

@@ -12,7 +12,7 @@ export class ScaleTimeline : TranslateTimeline {
         super(frameCount);
     }
 
-    override void apply(Skeleton skeleton, float lastTime, float time, Event[] events, float alpha) {
+    override void apply(E)(Skeleton skeleton, float lastTime, float time, E events, float alpha) {
         if(time < frames[0])
             return;
 

@@ -85,6 +85,7 @@ export class AnimationState {
                 continue;
 
             _events.length = 0;
+            auto eventsAppender = appender!(Event[])(_events);
             float time = current.time;
             bool loop = current.loop;
             if(!loop && time > current.endTime)
@@ -92,16 +93,16 @@ export class AnimationState {
             TrackEntry previous = current.previous;
             if(previous is null) {
                 if(current.mix == 1)
-                    current.animation.apply(skeleton, current.lastTime, time, loop, _events);
+                    current.animation.apply(skeleton, current.lastTime, time, loop, eventsAppender);
                 else
-                    current.animation.mix(skeleton, current.lastTime, time, loop, _events, current.mix);
+                    current.animation.mix(skeleton, current.lastTime, time, loop, eventsAppender, current.mix);
             } else {
                 float previousTime = previous.time;
                 if(!previous.loop && previousTime > previous.endTime)
                     previousTime = previous.endTime;
-                previous.animation.apply(skeleton, previous.lastTime, previousTime, previous.loop, null);
+                //previous.animation.apply(skeleton, previous.lastTime, previousTime, previous.loop, null);
 				// Remove the line above, and uncomment the line below, to allow previous animations to fire events during mixing.
-				//previous.animation.apply(skeleton, previous.lastTime, previousTime, previous.loop, _events);
+				previous.animation.apply(skeleton, previous.lastTime, previousTime, previous.loop, eventsAppender);
 				previous.lastTime = previousTime;
 
                 float alpha = current.mixTime / current.mixDuration * current.mix;
@@ -109,7 +110,7 @@ export class AnimationState {
                     alpha = 1;
                     current.previous = null;
                 }
-                current.animation.mix(skeleton, current.lastTime, time, loop, _events, alpha);
+                current.animation.mix(skeleton, current.lastTime, time, loop, eventsAppender, alpha);
             }
 
             for(int ii = 0; ii < _events.length; ii++) {
