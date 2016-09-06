@@ -2,6 +2,7 @@ module spine.attachment.region;
 
 import spine.attachment.attachment;
 import spine.bone.bone;
+static import std.math;
 
 export class RegionAttachment : Attachment {
 

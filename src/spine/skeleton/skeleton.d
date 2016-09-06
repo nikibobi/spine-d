@@ -7,6 +7,7 @@ import spine.skeleton.data;
 import spine.skin.skin;
 import spine.slot.slot;
 import spine.util.argnull;
+import std.algorithm.searching : countUntil;
 
 export class Skeleton {
 
