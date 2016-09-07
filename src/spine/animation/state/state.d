@@ -1,20 +1,28 @@
 module spine.animation.state.state;
 
+import std.array;
 import std.range;
+import std.signals;
 
 import spine.animation.animation;
 import spine.animation.state.data;
+import spine.animation.state.trackentry;
 import spine.event.event;
 import spine.skeleton.skeleton;
 import spine.util.argnull;
 
-//TODO: needs events implementation
 export class AnimationState {
 
     this(AnimationStateData data) {
         mixin(ArgNull!data);
         this.data = data;
+        this.timeScale = 1f;
     }
+
+    mixin Signal!(AnimationState, int) start;
+    mixin Signal!(AnimationState, int) end;
+    mixin Signal!(AnimationState, int, Event) event;
+    mixin Signal!(AnimationState, int, int) complete;
 
     @property {
         AnimationStateData data() {
@@ -53,10 +61,8 @@ export class AnimationState {
             // Check if completed the animation or a loop iteration.
             if(current.loop ? (current.lastTime % endTime > time % endTime) : (current.lastTime < endTime && time >= endTime)) {
                 int count = cast(int)(time / endTime);
-                //TODO: implement complete event
-                /*current.onComplete(this, i, count);
-                if(complete !is null)
-                    complete(this, i, count);*/
+                current.complete.emit(this, i, count);
+                complete.emit(this, i, count);
             }
 
             TrackEntry next = current.next;
@@ -108,10 +114,8 @@ export class AnimationState {
 
             for(int ii = 0; ii < _events.length; ii++) {
                 Event e = _events[ii];
-                //TODO: implement events
-                /*current.onEvent(this, i, e);
-                if(event !is null)
-                    event(this, i, e);*/
+                current.event.emit(this, i, e);
+                event.emit(this, i, e);
             }
 
             current.lastTime = current.time;
@@ -131,10 +135,8 @@ export class AnimationState {
         if(current is null)
             return;
 
-        //TODO: implement events
-        /*current.onEnd(this, trackIndex);
-        if(end !is null)
-            end(this, trackIndex);*/
+        current.end.emit(this, trackIndex);
+        end.emit(this, trackIndex);
         _tracks[trackIndex] = null;
     }
 
@@ -153,10 +155,8 @@ export class AnimationState {
             TrackEntry previous = current.previous;
             current.previous = null;
 
-            //TODO: implement delegates
-            /*current.onEnd(this, index);
-            if(end !is null)
-                end(this, index);*/
+            current.end.emit(this, index);
+            end.emit(this, index);
             entry.mixDuration = data.getMix(current.animation, entry.animation);
             if(entry.mixDuration > 0) {
                 entry.mixTime = 0;
@@ -170,10 +170,8 @@ export class AnimationState {
 
         _tracks[index] = entry;
 
-        //TODO: events!
-        /*entry.onStart(this, index);
-        if(start !is null)
-            start(this, index);*/
+        entry.start.emit(this, index);
+        start.emit(this, index);
     }
 
     TrackEntry setAnimation(int trackIndex, string animationName, bool loop) {
@@ -235,99 +233,24 @@ export class AnimationState {
     }
 
     override string toString() {
-        //TODO: finish this method
-        return "<temp>";
+        auto buffer = appender!string();
+        for(int i = 0; i < _tracks.length; i++)
+        {
+            TrackEntry entry = _tracks[i];
+            if(entry is null)
+                continue;
+            if(buffer.data.length > 0)
+                buffer ~= ", ";
+            buffer ~= entry.toString();
+        }
+        if(buffer.data.length == 0)
+            return "<none>";
+        return buffer.data;
     }
 
 private:
     AnimationStateData _data;
     TrackEntry[] _tracks;
     Event[] _events;
-    float _timeScale = 1;
-
-    //TODO: remove this and implement TrackEntry class in trackentry.d
-    class TrackEntry {
-
-        @property {
-            Animation animation() {
-                return _animation;
-            }
-            private void animation(Animation value) {
-                _animation = value;
-            }
-        }
-
-        @property {
-            float delay() {
-                return _delay;
-            }
-            void delay(float value) {
-                _delay = value;
-            }
-        }
-
-        @property {
-            float time() {
-                return _time;
-            }
-            void time(float value) {
-                _time = value;
-            }
-        }
-
-        @property {
-            float lastTime() {
-                return _lastTime;
-            }
-            void lastTime(float value) {
-                _lastTime = value;
-            }
-        }
-
-        @property {
-            float endTime() {
-                return _endTime;
-            }
-            void endTime(float value) {
-                _endTime = value;
-            }
-        }
-
-        @property {
-            float timeScale() {
-                return _timeScale;
-            }
-            void timeScale(float value) {
-                _timeScale = value;
-            }
-        }
-
-        @property {
-            float mix() {
-                return _mix;
-            }
-            void mix(float value) {
-                _mix = value;
-            }
-        }
-
-        @property {
-            bool loop() {
-                return _loop;
-            }
-            void loop(bool value) {
-                _loop = value;
-            }
-        }
-
-        override string toString() {
-            return animation is null ? "<none>" : animation.name;
-        }
-    package:
-        TrackEntry next, previous;
-        Animation _animation;
-        bool _loop;
-        float _delay, _time, _lastTime = -1, _endTime, _timeScale = 1;
-        float mixTime, mixDuration, _mix = 1;
-    }
+    float _timeScale;
 }
